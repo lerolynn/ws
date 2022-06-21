@@ -7,6 +7,8 @@ from torch.backends import cudnn
 import numpy as np
 import importlib
 import os
+import cv2
+import matplotlib.cm as cm
 
 import voc12.dataloader
 from misc import torchutils, imutils
@@ -24,7 +26,15 @@ def _work(process_id, model, dataset, args):
         model.cuda()
 
         for iter, pack in enumerate(data_loader):
+            """
+            Calculate CAM:
 
+            Mc = classification weights of class c * feature map of last conv layer / 
+                 max(classification weights of class c * feature map of last conv layer)
+            
+            CAMs for irrelevant classes are fixed to zero matrix,
+            stride of last downsampling layer is reduced from 2 to 1 to prevent CAMs from further resolution drop
+            """
             img_name = pack['name'][0]
             label = pack['label'][0]
             size = pack['size']
@@ -52,15 +62,25 @@ def _work(process_id, model, dataset, args):
             highres_cam /= F.adaptive_max_pool2d(highres_cam, (1, 1)) + 1e-5
 
             # save cams
-            np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
-                    {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
+            # np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
+            #         {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
+            
+            cam_np = np.max(highres_cam.cpu().numpy(), axis=0)
+
+            cam_dir = os.path.join(args.cam_out_dir, img_name + '.png')
+            # cam = highres_cam.cpu().numpy()
+            cmap = (cm.jet_r(cam_np)[..., :3] * 255.0).astype(np.float)
+            cv2.imwrite(cam_dir, np.uint8(cmap))
 
             if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
                 print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
 
 
 def run(args):
+
+    # Get model from train_cam classification stage
     model = getattr(importlib.import_module(args.cam_network), 'CAM')()
+
     model.load_state_dict(torch.load(args.cam_weights_name + '.pth'), strict=True)
     model.eval()
 
@@ -75,3 +95,4 @@ def run(args):
     print(']')
 
     torch.cuda.empty_cache()
+
