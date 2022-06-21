@@ -44,9 +44,7 @@ def _work(process_id, model, dataset, args):
 
             rw_up = F.interpolate(rw, scale_factor=4, mode='bilinear', align_corners=False)[..., 0, :orig_img_size[0], :orig_img_size[1]]
             rw_up = rw_up / torch.max(rw_up)
-            print(rw_up.shape)
             cam_np = np.max(rw_up.cpu().numpy(), axis=0)
-            print(cam_np.shape)
 
             cam_dir = os.path.join("result/seg_mask", img_name + '.png')
             cmap = (cm.jet_r(cam_np)[..., :3] * 255.0).astype(np.float)
