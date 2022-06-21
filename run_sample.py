@@ -82,36 +82,58 @@ if __name__ == '__main__':
     pyutils.Logger(args.log_name + '.log')
     print(vars(args))
 
+    # Train multiclass classification
     if args.train_cam_pass is True:
         import step.train_cam
 
         timer = pyutils.Timer('step.train_cam:')
         step.train_cam.run(args)
 
+    # Generate CAM activations 
     if args.make_cam_pass is True:
         import step.make_cam
 
         timer = pyutils.Timer('step.make_cam:')
         step.make_cam.run(args)
 
+    # Compare CAM activations with gt labels to get iou
     if args.eval_cam_pass is True:
         import step.eval_cam
 
         timer = pyutils.Timer('step.eval_cam:')
         step.eval_cam.run(args)
 
+    # Get IR labels from CAMS
+    """
+    collect interpixel relations as supervision for training irnet
+    get confident fb/bg attention scores and refine confident areas by dense CRF
+    save as black/white fg bg image, P+ is white fg; P- is bg 
+    """
     if args.cam_to_ir_label_pass is True:
         import step.cam_to_ir_label
 
         timer = pyutils.Timer('step.cam_to_ir_label:')
         step.cam_to_ir_label.run(args)
 
+    # Train IRN model (class agnostic - only P+ and P-)
+    """
+    1. Predict displacement vector field
+        - learn d implicitly with displacement between pixels of same class
+        - For a pair of nearby pixels, approximate image coordinate displacement
+    2. Detect boundaries between different classes
+        - Use semantic affinity between 2 pixels - min cross entropy between binary affinity label and predicted affinity
+    3. Jointly train both branches by minimizing summed loss from 1 and 2
+    """
     if args.train_irn_pass is True:
         import step.train_irn
 
         timer = pyutils.Timer('step.train_irn:')
         step.train_irn.run(args)
 
+    # Synthesize pseudo instance labels
+    """
+    convert displacement vector and boundary to class agnostic instance map and pairwise affinity
+    """
     if args.make_ins_seg_pass is True:
         import step.make_ins_seg_labels
 
@@ -124,6 +146,7 @@ if __name__ == '__main__':
         timer = pyutils.Timer('step.eval_ins_seg:')
         step.eval_ins_seg.run(args)
 
+    # Make labels from semantic segmentation (skip instance-wise CAM generation)
     if args.make_sem_seg_pass is True:
         import step.make_sem_seg_labels
 
@@ -136,3 +159,4 @@ if __name__ == '__main__':
         timer = pyutils.Timer('step.eval_sem_seg:')
         step.eval_sem_seg.run(args)
 
+    print("DONE")

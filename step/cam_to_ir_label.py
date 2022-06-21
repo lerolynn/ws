@@ -35,13 +35,13 @@ def _work(process_id, infer_dataset, args):
         bg_conf = keys[pred]
 
         # 2. combine confident fg & bg
+        # set confident foreground to white and background to black
         conf = fg_conf.copy()
         conf[fg_conf == 0] = 255
         conf[bg_conf + fg_conf == 0] = 0
 
         imageio.imwrite(os.path.join(args.ir_label_out_dir, img_name + '.png'),
                         conf.astype(np.uint8))
-
 
         if process_id == args.num_workers - 1 and iter % (len(databin) // 20) == 0:
             print("%d " % ((5 * iter + 1) // (len(databin) // 20)), end='')

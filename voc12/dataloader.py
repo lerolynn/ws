@@ -155,6 +155,7 @@ class VOC12ImageDataset(Dataset):
 
         return {'name': name_str, 'img': img}
 
+# Dataloader used to get data to train classification
 class VOC12ClassificationDataset(VOC12ImageDataset):
 
     def __init__(self, img_name_list_path, voc12_root,
@@ -172,6 +173,7 @@ class VOC12ClassificationDataset(VOC12ImageDataset):
 
         return out
 
+# Dataloader used to get data to make CAM
 class VOC12ClassificationDatasetMSF(VOC12ClassificationDataset):
 
     def __init__(self, img_name_list_path, voc12_root,
@@ -195,6 +197,7 @@ class VOC12ClassificationDatasetMSF(VOC12ClassificationDataset):
             else:
                 s_img = imutils.pil_rescale(img, s, order=3)
             s_img = self.img_normal(s_img)
+            # Transpose image channels
             s_img = imutils.HWC_to_CHW(s_img)
             ms_img_list.append(np.stack([s_img, np.flip(s_img, -1)], axis=0))
         if len(self.scales) == 1:

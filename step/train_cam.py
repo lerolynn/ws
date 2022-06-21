@@ -37,7 +37,8 @@ def validate(model, data_loader):
 
 
 def run(args):
-
+    # Run resnet50 classification model
+    
     model = getattr(importlib.import_module(args.cam_network), 'Net')()
 
 

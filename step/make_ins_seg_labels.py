@@ -150,6 +150,8 @@ def _work(process_id, model, dataset, args):
                                        max_fragment_size=size[0] * size[1] * 0.01)
 
             np.save(os.path.join(args.ins_seg_out_dir, img_name + '.npy'), detected)
+            
+            cam_dir = os.path.join("result/ins_mask", img_name + '.png')
 
             if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
                 print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')

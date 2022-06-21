@@ -62,12 +62,12 @@ def _work(process_id, model, dataset, args):
             highres_cam /= F.adaptive_max_pool2d(highres_cam, (1, 1)) + 1e-5
 
             # save cams
-            # np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
-            #         {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
+            np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
+                    {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
             
             cam_np = np.max(highres_cam.cpu().numpy(), axis=0)
 
-            cam_dir = os.path.join(args.cam_out_dir, img_name + '.png')
+            cam_dir = os.path.join("result/cam_mask", img_name + '.png')
             # cam = highres_cam.cpu().numpy()
             cmap = (cm.jet_r(cam_np)[..., :3] * 255.0).astype(np.float)
             cv2.imwrite(cam_dir, np.uint8(cmap))

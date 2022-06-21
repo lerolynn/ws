@@ -9,6 +9,9 @@ import importlib
 import os
 import imageio
 
+import matplotlib.cm as cm
+import cv2
+
 import voc12.dataloader
 from misc import torchutils, indexing
 
@@ -37,12 +40,18 @@ def _work(process_id, model, dataset, args):
             keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
 
             cam_downsized_values = cams.cuda()
-
             rw = indexing.propagate_to_edge(cam_downsized_values, edge, beta=args.beta, exp_times=args.exp_times, radius=5)
 
             rw_up = F.interpolate(rw, scale_factor=4, mode='bilinear', align_corners=False)[..., 0, :orig_img_size[0], :orig_img_size[1]]
             rw_up = rw_up / torch.max(rw_up)
+            print(rw_up.shape)
+            cam_np = np.max(rw_up.cpu().numpy(), axis=0)
+            print(cam_np.shape)
 
+            cam_dir = os.path.join("result/seg_mask", img_name + '.png')
+            cmap = (cm.jet_r(cam_np)[..., :3] * 255.0).astype(np.float)
+
+            cv2.imwrite(cam_dir, np.uint8(cmap))
             rw_up_bg = F.pad(rw_up, (0, 0, 0, 0, 1, 0), value=args.sem_seg_bg_thres)
             rw_pred = torch.argmax(rw_up_bg, dim=0).cpu().numpy()
 
