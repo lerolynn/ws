@@ -23,10 +23,10 @@ from torch.utils.tensorboard import SummaryWriter
 from torchnet.meter import MovingAverageValueMeter
 from tqdm import tqdm
 
-
+from libs.datasets import get_dataset
 from libs.models import DeepLabV2_ResNet101_MSC
 from libs.utils import DenseCRF, PolynomialLR, scores
-from libs.datasets import get_dataset
+
 
 def makedirs(dirs):
     if not os.path.exists(dirs):
