@@ -1,6 +1,6 @@
 data/VOC2012
 pseudo_mask/result
-data/logs/voc12/events.*
+data/logs/voc12/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
 # *.py[cod]
