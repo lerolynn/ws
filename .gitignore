@@ -1,5 +1,6 @@
 data/VOC2012
 pseudo_mask/result
+pseudo_mask/sess
 data/logs/voc12/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
