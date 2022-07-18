@@ -34,3 +34,8 @@ Evaluate performance on validation set
 ```python
 python main.py test --config-path configs/voc12.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train/checkpoint_final.pth
 ```
+
+Evaluate with CRF post-processing
+```python
+python main.py crf --config-path configs/voc12.yaml
+```
