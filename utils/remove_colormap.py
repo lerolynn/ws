@@ -28,7 +28,7 @@ import tensorflow as tf
 FLAGS = tf.compat.v1.flags.FLAGS
 
 tf.compat.v1.flags.DEFINE_string('original_gt_folder',
-                                 '../data/VOC2012/SegmentationClass_gtColor',
+                                 '../data/VOC2012/SegmentationClass',
                                  'Original ground truth annotations.')
 
 tf.compat.v1.flags.DEFINE_string('segmentation_format', 'png', 'Segmentation format.')

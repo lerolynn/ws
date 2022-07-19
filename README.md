@@ -15,6 +15,10 @@ cd pseudo_mask
 python run_sample.py --voc12_root ../data/VOC2012
 ```
 
+In home directory:
+```
+cp -r pseudo_mask/result/sem_seg data/VOC2012/SegmentationClass_pseudo
+```
 
 ### Segmentation
 
