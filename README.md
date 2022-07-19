@@ -39,3 +39,6 @@ Evaluate with CRF post-processing
 ```python
 python main.py crf --config-path configs/voc12.yaml
 ```
+
+
+python main.py test --config-path configs/voc12.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train_gtlabels/checkpoint_final.pth
