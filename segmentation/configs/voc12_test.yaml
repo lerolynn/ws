@@ -3,8 +3,7 @@ EXP:
     OUTPUT_DIR: data
 
 DATASET:
-    NAME: pseudovoc
-    # NAME: vocaug
+    NAME: voc
     ROOT: ../data
     LABELS: ./data/datasets/voc12/labels.txt
     N_CLASSES: 21
