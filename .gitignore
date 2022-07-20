@@ -1,4 +1,5 @@
 data/VOC2012
+data/coco
 pseudo_mask/result
 pseudo_mask/sess
 segmentation/data/logs
