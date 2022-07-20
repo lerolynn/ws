@@ -15,6 +15,12 @@ cd pseudo_mask
 python run_sample.py --voc12_root ../data/VOC2012
 ```
 
+```python
+python run_sample.py --voc12_root ../data/VOC2012 --infer_list voc12/train_aug.txt --train_cam_pass False \
+--make_cam_pass False --eval_cam_pass False --cam_to_ir_label_pass False \
+--train_irn_pass False --make_ins_seg_pass False --eval_ins_seg_pass False --make_sem_seg_pass False
+```
+
 In home directory:
 ```
 cp -r pseudo_mask/result/sem_seg data/VOC2012/SegmentationClass_pseudo
