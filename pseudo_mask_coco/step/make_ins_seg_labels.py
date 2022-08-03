@@ -9,7 +9,7 @@ import importlib
 import os
 
 import skimage
-import voc12.dataloader
+import coco14.dataloader
 from misc import torchutils, imutils, pyutils, indexing
 
 cudnn.enabled = True
@@ -162,8 +162,8 @@ def run(args):
 
     n_gpus = torch.cuda.device_count()
 
-    dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.infer_list,
-                                                             voc12_root=args.voc12_root,
+    dataset = coco14.dataloader.COCO14ClassificationDatasetMSF(args.infer_list,
+                                                             coco14_root=args.coco14_root,
                                                              scales=(1.0,))
     dataset = torchutils.split_dataset(dataset, n_gpus)
 

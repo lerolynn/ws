@@ -66,8 +66,8 @@ def run(args):
 
     n_gpus = torch.cuda.device_count()
 
-    dataset = coco14.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
-                                                             voc12_root=args.voc12_root, scales=args.cam_scales)
+    dataset = coco14.dataloader.COCO14ClassificationDatasetMSF(args.train_list,
+                                                             coco14_root=args.coco14_root, scales=args.cam_scales)
     dataset = torchutils.split_dataset(dataset, n_gpus)
 
     print('[ ', end='')

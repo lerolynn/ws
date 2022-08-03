@@ -37,3 +37,23 @@ SegmentationClass_pseudo
 
 
 ## COCO
+
+```
+|
+|- Annotations
+|- coco_seg_anno
+|- JPEGImages
+| | - train2014
+| | - val2014
+ - labels.txt
+
+```
+
+Annotations and JPEGImages are downloaded from the COCO official website
+
+`coco_seg_anno` has the image annotations for semantic segmentation. The annotations can be downloaded from the link below and is provide by the [RIB](https://github.com/jbeomlee93/RIB) repository
+
+```
+gdown https://drive.google.com/uc?id=1pRE9SEYkZKVg0Rgz2pi9tg48j7GlinPV
+```
+

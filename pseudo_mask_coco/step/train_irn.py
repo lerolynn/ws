@@ -3,7 +3,7 @@ import torch
 from torch.backends import cudnn
 cudnn.enabled = True
 from torch.utils.data import DataLoader
-import voc12.dataloader
+import coco14.dataloader
 from misc import pyutils, torchutils, indexing
 import importlib
 
@@ -14,9 +14,9 @@ def run(args):
     model = getattr(importlib.import_module(args.irn_network), 'AffinityDisplacementLoss')(
         path_index)
 
-    train_dataset = voc12.dataloader.VOC12AffinityDataset(args.train_list,
+    train_dataset = coco14.dataloader.COCO14AffinityDataset(args.train_list,
                                                           label_dir=args.ir_label_out_dir,
-                                                          voc12_root=args.voc12_root,
+                                                          coco14_root=args.coco14_root,
                                                           indices_from=path_index.src_indices,
                                                           indices_to=path_index.dst_indices,
                                                           hor_flip=True,
@@ -84,8 +84,8 @@ def run(args):
         else:
             timer.reset_stage()
 
-    infer_dataset = voc12.dataloader.VOC12ImageDataset(args.infer_list,
-                                                       voc12_root=args.voc12_root,
+    infer_dataset = coco14.dataloader.COCO14ImageDataset(args.infer_list,
+                                                       coco14_root=args.coco14_root,
                                                        crop_size=args.irn_crop_size,
                                                        crop_method="top_left")
     infer_data_loader = DataLoader(infer_dataset, batch_size=args.irn_batch_size,

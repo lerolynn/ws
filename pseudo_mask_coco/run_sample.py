@@ -50,8 +50,8 @@ if __name__ == '__main__':
 
     # Output Path
     parser.add_argument("--log_name", default="sample_train_eval", type=str)
-    parser.add_argument("--cam_weights_name", default="sess/res50_cam.pth", type=str)
-    parser.add_argument("--irn_weights_name", default="sess/res50_irn.pth", type=str)
+    parser.add_argument("--cam_weights_name", default="sess/res50_coco_cam.pth", type=str)
+    parser.add_argument("--irn_weights_name", default="sess/res50_coco_irn.pth", type=str)
     parser.add_argument("--cam_out_dir", default="result/cam", type=str)
     parser.add_argument("--ir_label_out_dir", default="result/ir_label", type=str)
     parser.add_argument("--sem_seg_out_dir", default="result/sem_seg", type=str)
@@ -66,7 +66,7 @@ if __name__ == '__main__':
     parser.add_argument("--make_ins_seg_pass", default=False)
     parser.add_argument("--eval_ins_seg_pass", default=False)
     parser.add_argument("--make_sem_seg_pass", default=False)
-    parser.add_argument("--eval_sem_seg_pass", default=False)
+    # parser.add_argument("--eval_sem_seg_pass", default=False)
 
     args = parser.parse_args()
 
@@ -115,11 +115,11 @@ if __name__ == '__main__':
         timer = pyutils.Timer('step.make_ins_seg_labels:')
         step.make_ins_seg_labels.run(args)
 
-    if args.eval_ins_seg_pass is True:
-        import step.eval_ins_seg
+    # if args.eval_ins_seg_pass is True:
+    #     import step.eval_ins_seg
 
-        timer = pyutils.Timer('step.eval_ins_seg:')
-        step.eval_ins_seg.run(args)
+    #     timer = pyutils.Timer('step.eval_ins_seg:')
+    #     step.eval_ins_seg.run(args)
 
     if args.make_sem_seg_pass is True:
         import step.make_sem_seg_labels

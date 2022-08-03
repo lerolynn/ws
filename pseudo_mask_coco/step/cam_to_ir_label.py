@@ -6,7 +6,7 @@ import imageio
 from torch import multiprocessing
 from torch.utils.data import DataLoader
 
-import voc12.dataloader
+import coco14.dataloader
 from misc import torchutils, imutils
 
 
@@ -16,7 +16,7 @@ def _work(process_id, infer_dataset, args):
     infer_data_loader = DataLoader(databin, shuffle=False, num_workers=0, pin_memory=False)
 
     for iter, pack in enumerate(infer_data_loader):
-        img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
+        img_name = coco14.dataloader.decode_int_filename(pack['name'][0])
         img = pack['img'][0].numpy()
         cam_dict = np.load(os.path.join(args.cam_out_dir, img_name + '.npy'), allow_pickle=True).item()
 
@@ -47,7 +47,7 @@ def _work(process_id, infer_dataset, args):
             print("%d " % ((5 * iter + 1) // (len(databin) // 20)), end='')
 
 def run(args):
-    dataset = voc12.dataloader.VOC12ImageDataset(args.train_list, voc12_root=args.voc12_root, img_normal=None, to_torch=False)
+    dataset = coco14.dataloader.COCO14ImageDataset(args.train_list, coco14_root=args.coco14_root, img_normal=None, to_torch=False)
     dataset = torchutils.split_dataset(dataset, args.num_workers)
 
     print('[ ', end='')
