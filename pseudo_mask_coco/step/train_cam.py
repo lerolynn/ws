@@ -49,7 +49,7 @@ def run(args):
     max_step = (len(train_dataset) // args.cam_batch_size) * args.cam_num_epoches
 
     val_dataset = coco14.dataloader.COCO14ClassificationDataset(args.val_list, coco14_root=args.coco14_root,
-                                                              crop_size=512)
+                                                              crop_size=512, train=False)
     val_data_loader = DataLoader(val_dataset, batch_size=args.cam_batch_size,
                                  shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 

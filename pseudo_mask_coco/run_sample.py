@@ -12,9 +12,9 @@ if __name__ == '__main__':
     parser.add_argument("--coco14_root", default="../data/coco2014", type=str)
 
     # Dataset
-    parser.add_argument("--train_list", default="coco14/train14.txt", type=str)
-    parser.add_argument("--val_list", default="coco14/val14.txt", type=str)
-    parser.add_argument("--infer_list", default="coco14/train14.txt", type=str)
+    parser.add_argument("--train_list", default="coco14/train2014.txt", type=str)
+    parser.add_argument("--val_list", default="coco14/val2014.txt", type=str)
+    parser.add_argument("--infer_list", default="coco14/train2014.txt", type=str)
     parser.add_argument("--chainer_eval_set", default="train", type=str)
 
     # Class Activation Map

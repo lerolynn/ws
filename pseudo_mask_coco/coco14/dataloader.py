@@ -7,7 +7,7 @@ import imageio
 from misc import imutils
 import random
 
-IMG_FOLDER_NAME = "JPEGImages/train2014"
+IMG_FOLDER_NAME = "JPEGImages"
 ANNOT_FOLDER_NAME = "Annotations"
 IGNORE = 255
 
@@ -39,10 +39,13 @@ def load_image_label_list_from_npy(img_name_list):
     # print(cls_labels_dict[int(img_name_list[0])])
     return np.array([cls_labels_dict[int(img_name)] for img_name in img_name_list])
 
-def get_img_path(img_name, coco14_root):
+def get_img_path(img_name, coco14_root, train):
     if not isinstance(img_name, str):
         img_name = decode_int_filename(img_name)
-    return os.path.join(coco14_root, IMG_FOLDER_NAME, 'COCO_train2014_' + img_name + '.jpg')
+    if train:
+        return os.path.join(coco14_root, IMG_FOLDER_NAME, 'train2014/COCO_train2014_' + img_name + '.jpg')
+    else:
+        return os.path.join(coco14_root, IMG_FOLDER_NAME, 'val2014/COCO_val2014_' + img_name + '.jpg')
 
 def load_img_name_list(dataset_path):
 
@@ -98,12 +101,13 @@ class GetAffinityLabelFromIndices():
 
 class COCO14ImageDataset(Dataset):
 
-    def __init__(self, img_name_list_path, coco14_root,
+    def __init__(self, img_name_list_path, coco14_root, train=True,
                  resize_long=None, rescale=None, img_normal=TorchvisionNormalize(), hor_flip=False,
                  crop_size=None, crop_method=None, to_torch=True):
 
         self.img_name_list = load_img_name_list(img_name_list_path)
         self.coco14_root = coco14_root
+        self.train = train
 
         self.resize_long = resize_long
         self.rescale = rescale
@@ -119,8 +123,7 @@ class COCO14ImageDataset(Dataset):
     def __getitem__(self, idx):
         name = self.img_name_list[idx]
         name_str = decode_int_filename(name)
-
-        img = np.asarray(imageio.imread(get_img_path(name_str, self.coco14_root)))
+        img = np.asarray(imageio.imread(get_img_path(name_str, self.coco14_root, self.train)))
         # gray scale
         if len(img.shape) == 2:
             img = np.concatenate([np.expand_dims(img, 2), np.expand_dims(img, 2), np.expand_dims(img, 2)], axis=2)
@@ -151,10 +154,10 @@ class COCO14ImageDataset(Dataset):
 
 class COCO14ClassificationDataset(COCO14ImageDataset):
 
-    def __init__(self, img_name_list_path, coco14_root,
+    def __init__(self, img_name_list_path, coco14_root, train=True,
                  resize_long=None, rescale=None, img_normal=TorchvisionNormalize(), hor_flip=False,
                  crop_size=None, crop_method=None):
-        super().__init__(img_name_list_path, coco14_root,
+        super().__init__(img_name_list_path, coco14_root, train,
                  resize_long, rescale, img_normal, hor_flip,
                  crop_size, crop_method)
         self.label_list = load_image_label_list_from_npy(self.img_name_list)
@@ -180,7 +183,7 @@ class COCO14ClassificationDatasetMSF(COCO14ClassificationDataset):
         name = self.img_name_list[idx]
         name_str = decode_int_filename(name)
 
-        img = imageio.imread(get_img_path(name_str, self.coco14_root))
+        img = imageio.imread(get_img_path(name_str, self.coco14_root, self.train))
         if len(img.shape) == 2:
             img = np.concatenate([np.expand_dims(img, 2), np.expand_dims(img, 2), np.expand_dims(img, 2)], axis=2)
         ms_img_list = []
@@ -226,7 +229,7 @@ class COCO14SegmentationDataset(Dataset):
         name = self.img_name_list[idx]
         name_str = decode_int_filename(name)
 
-        img = imageio.imread(get_img_path(name_str, self.coco14_root))
+        img = imageio.imread(get_img_path(name_str, self.coco14_root, self.train))
 
         try:
             label = imageio.imread(os.path.join(self.label_dir, name_str + '.png'))
