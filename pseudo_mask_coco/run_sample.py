@@ -66,7 +66,7 @@ if __name__ == '__main__':
     parser.add_argument("--make_ins_seg_pass", default=False)
     parser.add_argument("--eval_ins_seg_pass", default=False)
     parser.add_argument("--make_sem_seg_pass", default=False)
-    # parser.add_argument("--eval_sem_seg_pass", default=False)
+    parser.add_argument("--eval_sem_seg_pass", default=False)
 
     args = parser.parse_args()
 
