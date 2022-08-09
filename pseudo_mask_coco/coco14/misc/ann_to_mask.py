@@ -18,7 +18,6 @@ category_map = {"1": 1, "2": 2, "3": 3, "4": 4, "5": 5, "6": 6, "7": 7, "8": 8, 
                 "80": 71, "81": 72, "82": 73, "84": 74, "85": 75, "86": 76, "87": 77, "88": 78, "89": 79, "90": 80}
 
 
-
 def work(process_id, infer_dataset, coco, mask_path):
     databin = infer_dataset[process_id]
     print(len(databin))
