@@ -39,7 +39,7 @@ def load_image_label_list_from_npy(img_name_list):
     # print(cls_labels_dict[int(img_name_list[0])])
     return np.array([cls_labels_dict[int(img_name)] for img_name in img_name_list])
 
-def get_img_path(img_name, coco14_root, train):
+def get_img_path(img_name, coco14_root, train=True):
     if not isinstance(img_name, str):
         img_name = decode_int_filename(img_name)
     if train:
@@ -229,7 +229,7 @@ class COCO14SegmentationDataset(Dataset):
         name = self.img_name_list[idx]
         name_str = decode_int_filename(name)
 
-        img = imageio.imread(get_img_path(name_str, self.coco14_root, self.train))
+        img = imageio.imread(get_img_path(name_str, self.coco14_root))
 
         try:
             label = imageio.imread(os.path.join(self.label_dir, name_str + '.png'))
