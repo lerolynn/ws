@@ -132,7 +132,8 @@ if __name__ == '__main__':
 
     if args.eval_sem_seg_pass is True:
         import step.eval_sem_seg
-
+        print()
         timer = pyutils.Timer('step.eval_sem_seg:')
+        print("Foreground Confidence Threshold: ", args.conf_fg_thres)
         step.eval_sem_seg.run(args)
 

@@ -29,3 +29,4 @@ def run(args):
     print(np.mean(fp[1:]), np.mean(fn[1:]))
 
     print({'iou': iou, 'miou': np.nanmean(iou)})
+    print()
