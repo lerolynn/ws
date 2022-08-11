@@ -6,14 +6,14 @@ from PIL import Image
 from tqdm import tqdm
 
 def run(args):
-    ids = open('coco14/train14.txt').readlines()
+    ids = open('coco14/train2014.txt').readlines()
     ids = [i.split('\n')[0] for i in ids]
     preds = []
     labels = []
     n_images = 0
 
     for i, id in enumerate(tqdm(ids)):
-        label = np.array(Image.open('/data/coco_2014/coco_seg_anno/%s.png' % id))
+        label = np.array(Image.open('../data/coco2014/mask/train2014/%s.png' % id))
         n_images += 1
         cam_dict = np.load(os.path.join(args.cam_out_dir, id + '.npy'), allow_pickle=True).item()
         if not ('high_res' in cam_dict):
