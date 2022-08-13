@@ -46,7 +46,7 @@ def _work(process_id, model, dataset, args):
 
             # TEMP: Skip cams that take more gpu memory than available
             # Value is 21920 for server, 16960 for local pc
-            if cams.shape[1] * cams.shape[2] > 21920:
+            if cams.shape[1] * cams.shape[2] > 16960:
                 print(img_name, cams.shape, cams.shape[1]*cams.shape[2])
                 continue
 
@@ -89,5 +89,5 @@ def run(args):
     print("[", end='')
     multiprocessing.spawn(_work, nprocs=n_gpus, args=(model, dataset, args), join=True)
     print("]")
-    output_file.close()
+    
     torch.cuda.empty_cache()
