@@ -36,6 +36,18 @@ def _work(process_id, model, dataset, args):
             cams = cam_dict['cam']
             keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
 
+            # Directly save masks with just background class
+            if keys.shape[0] == 1:
+                conf = np.zeros_like(pack['img'][0])[0, 0]
+                imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), conf.astype(np.uint8))
+                continue
+
+            # TEMP: Skip cams that take more gpu memory than available
+            # Value is 21920 for server, 156960 for local pc
+            if cams.shape[1] * cams.shape[2] >= 21920:
+                print(img_name, cams.shape, cams.shape[1]*cams.shape[2])
+                continue
+
             cam_downsized_values = cams.cuda()
 
             rw = indexing.propagate_to_edge(cam_downsized_values, edge, beta=args.beta, exp_times=args.exp_times, radius=5)

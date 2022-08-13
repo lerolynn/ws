@@ -62,8 +62,8 @@ if __name__ == '__main__':
     parser.add_argument("--make_cam_pass", default=False)
     parser.add_argument("--eval_cam_pass", default=False)
     parser.add_argument("--cam_to_ir_label_pass", default=False)
-    parser.add_argument("--train_irn_pass", default=True)
-    parser.add_argument("--make_ins_seg_pass", default=True)
+    parser.add_argument("--train_irn_pass", default=False)
+    # parser.add_argument("--make_ins_seg_pass", default=False)
     # parser.add_argument("--eval_ins_seg_pass", default=False)
     parser.add_argument("--make_sem_seg_pass", default=True)
     parser.add_argument("--eval_sem_seg_pass", default=True)
@@ -109,11 +109,11 @@ if __name__ == '__main__':
         timer = pyutils.Timer('step.train_irn:')
         step.train_irn.run(args)
 
-    if args.make_ins_seg_pass is True:
-        import step.make_ins_seg_labels
+    # if args.make_ins_seg_pass is True:
+    #     import step.make_ins_seg_labels
 
-        timer = pyutils.Timer('step.make_ins_seg_labels:')
-        step.make_ins_seg_labels.run(args)
+    #     timer = pyutils.Timer('step.make_ins_seg_labels:')
+    #     step.make_ins_seg_labels.run(args)
 
     # if args.eval_ins_seg_pass is True:
     #     import step.eval_ins_seg
