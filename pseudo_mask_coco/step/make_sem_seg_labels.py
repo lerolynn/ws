@@ -40,11 +40,13 @@ def _work(process_id, model, dataset, args):
             if keys.shape[0] == 1:
                 conf = np.zeros_like(pack['img'][0])[0, 0]
                 imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), conf.astype(np.uint8))
+                with open("coco14/train2014_semseg.txt", "a") as writer:
+                    writer.write(img_name + "\n")
                 continue
 
             # TEMP: Skip cams that take more gpu memory than available
-            # Value is 21920 for server, 156960 for local pc
-            if cams.shape[1] * cams.shape[2] >= 21920:
+            # Value is 21920 for server, 16960 for local pc
+            if cams.shape[1] * cams.shape[2] > 21920:
                 print(img_name, cams.shape, cams.shape[1]*cams.shape[2])
                 continue
 
@@ -61,6 +63,9 @@ def _work(process_id, model, dataset, args):
             rw_pred = keys[rw_pred]
 
             imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), rw_pred.astype(np.uint8))
+            with open("coco14/train2014_semseg.txt", "a") as writer:
+                writer.write(img_name + "\n")
+                print("E")
 
             if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
                 print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
@@ -78,8 +83,12 @@ def run(args):
                                                              scales=(1.0,))
     dataset = torchutils.split_dataset(dataset, n_gpus)
 
+
+    output_path = "coco14/train2014_semseg.txt"
+    open(output_path, 'a').close()
+
     print("[", end='')
     multiprocessing.spawn(_work, nprocs=n_gpus, args=(model, dataset, args), join=True)
     print("]")
-
+    output_file.close()
     torch.cuda.empty_cache()
