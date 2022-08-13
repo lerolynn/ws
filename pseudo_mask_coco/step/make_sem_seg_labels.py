@@ -65,7 +65,6 @@ def _work(process_id, model, dataset, args):
             imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), rw_pred.astype(np.uint8))
             with open("coco14/train2014_semseg.txt", "a") as writer:
                 writer.write(img_name + "\n")
-                print("E")
 
             if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
                 print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
