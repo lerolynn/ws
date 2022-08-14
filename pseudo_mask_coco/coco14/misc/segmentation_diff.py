@@ -13,7 +13,7 @@ with open('../train2014_semseg.txt', 'w') as f:
     for item in shortlist:
         f.write("%s\n" % item)
 
-notdone = list(longlist - shortlist)
+notdone = list(set(longlist) - set(shortlist))
 
 with open('../train2014_notdone.txt', 'w') as fp:
     print(len(notdone))
