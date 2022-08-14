@@ -1,4 +1,4 @@
-with open('../train2014_250.txt', 'r') as f:
+with open('../train2014.txt', 'r') as f:
     longlist = set([line.strip() for line in f])
 
 with open('../train2014_semseg.txt', 'r') as f:
