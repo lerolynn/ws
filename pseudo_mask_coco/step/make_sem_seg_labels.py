@@ -16,7 +16,7 @@ cudnn.enabled = True
 
 def _work(process_id, model, dataset, args):
 
-    n_gpus = torch.cuda.device_count()
+    n_gpus = min(torch.cuda.device_count(), 2)
     databin = dataset[process_id]
     data_loader = DataLoader(databin,
                              shuffle=False, num_workers=args.num_workers // n_gpus, pin_memory=False)
@@ -75,7 +75,7 @@ def run(args):
     model.load_state_dict(torch.load(args.irn_weights_name), strict=False)
     model.eval()
 
-    n_gpus = torch.cuda.device_count()
+    n_gpus = min(torch.cuda.device_count(), 2)
 
     dataset = coco14.dataloader.COCO14ClassificationDatasetMSF(args.infer_list,
                                                              coco14_root=args.coco14_root,
