@@ -46,9 +46,9 @@ def _work(process_id, model, dataset, args):
 
             # TEMP: Skip cams that take more gpu memory than available
             # Value is 21920 for server, 16960 for local pc
-            if cams.shape[1] * cams.shape[2] > 21920:
-                print(img_name, cams.shape, cams.shape[1]*cams.shape[2])
-                continue
+            # if cams.shape[1] * cams.shape[2] > 21920:
+            #     print(img_name, cams.shape, cams.shape[1]*cams.shape[2])
+            #     continue
 
             cam_downsized_values = cams.cuda()
 
