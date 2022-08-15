@@ -1,15 +1,24 @@
 name: testws
 
-dependencies:
-  - python=3.7.13
-  - pytorch==1.1.0
+channels:
+  - pytorch
 
-  - pip
+dependencies:
+  - python=3.7
+  - pytorch
+
   - pip:
-    - chainercv==0.13.1
+    - numpy==1.21
+    - imageio==2.19
+    - chainercv==0.13
+    - git+https://github.com/lucasb-eyer/pydensecrf.git
+    - scikit-image
+
+
+        
+    
     - cython==0.29.30
-    - imageio
+    
     - pycocotools==2.0.4
     - scikit-image==0.19.3
     - torchvision==0.12.0
-    - git+https://github.com/lucasb-eyer/pydensecrf.git
