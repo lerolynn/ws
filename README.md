@@ -30,6 +30,11 @@ cp -r pseudo_mask/result/sem_seg data/VOC2012/SegmentationClass_pseudo
 
 In `segmentation` directory:
 
+To download weights pretrained on imagenet for segmentation
+```
+gdown https://drive.google.com/uc?id=14soMKDnIZ_crXQTlol9sNHVPozcQQpMn
+```
+
 ```python
 conda activate deeplab-pytorch
 cd segmentation
@@ -41,14 +46,16 @@ python main.py train --config-path configs/voc12.yaml
 ```
 
 Evaluate performance on validation set
+
 ```python
 python main.py test --config-path configs/voc12_test.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train/checkpoint_final.pth
 ```
 
 Evaluate with CRF post-processing
 ```python
-python main.py crf --config-path configs/voc12.yaml
+python main.py crf --config-path configs/voc12_test.yaml
 ```
 
 
 python main.py test --config-path configs/voc12_test.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/caffemodel/deeplabv2_resnet101_msc-vocaug.pth
+
