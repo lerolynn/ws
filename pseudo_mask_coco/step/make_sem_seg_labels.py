@@ -40,8 +40,6 @@ def _work(process_id, model, dataset, args):
             if keys.shape[0] == 1:
                 conf = np.zeros_like(pack['img'][0])[0, 0]
                 imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), conf.astype(np.uint8))
-                with open("coco14/train2014_semseg.txt", "a") as writer:
-                    writer.write(img_name + "\n")
                 continue
 
             # TEMP: Skip cams that take more gpu memory than available
@@ -63,8 +61,6 @@ def _work(process_id, model, dataset, args):
             rw_pred = keys[rw_pred]
 
             imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), rw_pred.astype(np.uint8))
-            with open("coco14/train2014_semseg.txt", "a") as writer:
-                writer.write(img_name + "\n")
 
             if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
                 print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
@@ -81,10 +77,6 @@ def run(args):
                                                              coco14_root=args.coco14_root,
                                                              scales=(1.0,))
     dataset = torchutils.split_dataset(dataset, n_gpus)
-
-
-    output_path = "coco14/train2014_semseg.txt"
-    open(output_path, 'a').close()
 
     print("[", end='')
     multiprocessing.spawn(_work, nprocs=n_gpus, args=(model, dataset, args), join=True)
