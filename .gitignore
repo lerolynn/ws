@@ -1,8 +1,12 @@
 data/VOC2012
+data/coco2014
+
 pseudo_mask/result
 pseudo_mask/sess
+
 segmentation/data/logs
 segmentation/data/scores
+
 data/logs/voc12/*
 # Byte-compiled / optimized / DLL files
 __pycache__/
