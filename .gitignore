@@ -4,6 +4,9 @@ data/coco2014
 pseudo_mask/result
 pseudo_mask/sess
 
+pseudo_mask_coco/result
+pseudo_mask_coco/sess
+
 segmentation/data/logs
 segmentation/data/scores
 
