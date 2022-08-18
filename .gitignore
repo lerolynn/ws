@@ -14,6 +14,7 @@ pseudo_mask_coco/coco14/train2014_*
 segmentation/data/logs
 segmentation/data/scores
 
+
 segmentation/output
 
 data/logs/voc12/*
@@ -24,3 +25,4 @@ __pycache__/
 
 *.log
 *.tar.gz
+*.pth
