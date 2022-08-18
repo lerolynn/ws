@@ -67,7 +67,7 @@ python main.py train --config-path configs/voc12.yaml
 Evaluate performance on validation set
 
 ```python
-python main.py test --config-path configs/voc12_test.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train_aug/checkpoint_final.pth
+python main.py test --config-path configs/voc12.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train/checkpoint_final.pth
 ```
 
 Evaluate with CRF post-processing

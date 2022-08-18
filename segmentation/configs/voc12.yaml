@@ -4,6 +4,7 @@ EXP:
 
 DATASET:
     NAME: voc
+    NAME_PSEUDO: pseudovoc
     ROOT: ../data
     LABELS: ./data/datasets/voc12/labels.txt
     N_CLASSES: 21
@@ -42,7 +43,7 @@ SOLVER:
     ITER_SAVE: 5000
     ITER_TB: 100
     LR_DECAY: 10
-    LR: 2.5e-4
+    LR: 2.5e-5
     MOMENTUM: 0.9
     OPTIMIZER: sgd
     POLY_POWER: 0.9

@@ -1,4 +1,4 @@
-from .voc import VOC, VOCAug
+from .voc import VOC, VOCAug, pseudoVOC
 from .cocostuff import CocoStuff10k, CocoStuff164k
 
 
@@ -7,5 +7,6 @@ def get_dataset(name):
         "cocostuff10k": CocoStuff10k,
         "cocostuff164k": CocoStuff164k,
         "voc": VOC,
+        "pseudovoc": pseudoVOC,
         "vocaug": VOCAug,
     }[name]
