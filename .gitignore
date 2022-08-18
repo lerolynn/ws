@@ -9,8 +9,12 @@ pseudo_mask/sess
 pseudo_mask_coco/result
 pseudo_mask_coco/sess
 
+pseudo_mask_coco/coco14/train2014_*
+
 segmentation/data/logs
 segmentation/data/scores
+
+segmentation/output
 
 data/logs/voc12/*
 # Byte-compiled / optimized / DLL files

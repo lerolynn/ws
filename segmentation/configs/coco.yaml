@@ -1,6 +1,6 @@
 EXP:
     ID: coco
-    OUTPUT_DIR: data/coco
+    OUTPUT_DIR: output/coco
 
 DATASET:
     NAME: coco
@@ -36,14 +36,14 @@ MODEL:
 
 SOLVER:
     BATCH_SIZE:
-        TRAIN: 10
+        TRAIN: 5
         TEST: 1
-    ITER_MAX: 2
-    ITER_SIZE: 1
+    ITER_MAX: 20000
+    ITER_SIZE: 2
     ITER_SAVE: 2500
     ITER_TB: 20
     LR_DECAY: 10
-    LR: 2.5e-4
+    LR: 2.5e-5
     MOMENTUM: 0.9
     OPTIMIZER: sgd
     POLY_POWER: 0.9

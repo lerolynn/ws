@@ -34,12 +34,12 @@ class COCO(_BaseDataset):
     def _load_data(self, index):
         # Set paths
         image_id = self.files[index]
-        image_path = osp.join(self.root, "JPEGImages", self.split, "COCO_train{}_".format(self.year) + image_id + ".jpg")
+        image_path = osp.join(self.root, "JPEGImages", self.split, "COCO_{}_".format(self.split) + image_id + ".jpg")
         label_path = osp.join(self.root, "mask", self.split, image_id + ".png")
 
         # Load an image and label
         image = cv2.imread(image_path, cv2.IMREAD_COLOR).astype(np.float32)
-        label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
+        label = np.asarray(Image.open(label_path), dtype=np.int32)
         return image_id, image, label
 
 class pseudoCOCO(_BaseDataset):
@@ -63,10 +63,10 @@ class pseudoCOCO(_BaseDataset):
     def _load_data(self, index):
         # Set paths
         image_id = self.files[index]
-        image_path = osp.join(self.root, "JPEGImages", self.split, "COCO_train{}_".format(self.year) + image_id + ".jpg")
+        image_path = osp.join(self.root, "JPEGImages", self.split, "COCO_{}_".format(self.split) + image_id + ".jpg")
         label_path = osp.join(self.root, "mask", self.split, image_id + ".png")
 
         # Load an image and label
         image = cv2.imread(image_path, cv2.IMREAD_COLOR).astype(np.float32)
-        label = cv2.imread(label_path, cv2.IMREAD_GRAYSCALE)
+        label = np.asarray(Image.open(label_path), dtype=np.int32)
         return image_id, image, label
