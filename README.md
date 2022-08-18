@@ -72,7 +72,7 @@ python main.py test --config-path configs/voc12.yaml --model-path data/models/vo
 
 Evaluate with CRF post-processing
 ```python
-python main.py crf --config-path configs/voc12_test.yaml
+python main.py crf --config-path configs/voc12.yaml
 ```
 
 

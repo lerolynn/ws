@@ -1,6 +1,8 @@
 data/VOC2012
 data/coco2014
 
+!data/coco2014/ImageSets/*
+
 pseudo_mask/result
 pseudo_mask/sess
 
