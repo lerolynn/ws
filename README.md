@@ -51,6 +51,7 @@ In `segmentation` directory:
 
 To download weights pretrained on imagenet for segmentation
 ```
+cd segmentation/data/models/imagenet
 gdown https://drive.google.com/uc?id=14soMKDnIZ_crXQTlol9sNHVPozcQQpMn
 ```
 
@@ -61,6 +62,8 @@ cd segmentation
 
 Train Deeplab v2 on PascalVOC2012
 ```python
+python main.py train --config-path configs/voc12.yaml
+
 python main.py train --config-path configs/coco.yaml
 ```
 
@@ -74,7 +77,7 @@ python main.py test --config-path configs/coco.yaml --model-path output/coco/mod
 
 Evaluate with CRF post-processing
 ```python
-python main.py crf --config-path configs/voc12.yaml
+python main.py crf --config-path configs/coco.yaml
 ```
 
 
