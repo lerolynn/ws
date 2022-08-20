@@ -1,4 +1,4 @@
-name: testws
+name: wsss
 
 channels:
   - pytorch
@@ -6,7 +6,7 @@ channels:
 dependencies:
   - python=3.7
   - pytorch
-
+  - click
   - pip:
     - numpy==1.21
     - imageio==2.19
@@ -14,11 +14,15 @@ dependencies:
     - git+https://github.com/lucasb-eyer/pydensecrf.git
     - scikit-image
 
+    - joblib
+    - omegaconf
+    - tensorflow
+    - torchnet
+    - opencv-python
 
-        
+    - gdown
     
     - cython==0.29.30
-    
     - pycocotools==2.0.4
     - scikit-image==0.19.3
     - torchvision==0.12.0
