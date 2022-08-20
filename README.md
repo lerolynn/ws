@@ -2,7 +2,7 @@
 
 ## Installation
 
-This repository is tested on Ubuntu 18.04, using Python 3.7 and Pytorch 1.11 Other environment variables are specified in the `environment.yml` file.
+This repository is tested on Ubuntu 18.04, using Python 3.7 and Pytorch >= 1.11 Other environment variables are as specified in the `environment.yml` file.
 
 Run the following to create the conda environment to run the repository.
 
@@ -10,8 +10,13 @@ Run the following to create the conda environment to run the repository.
 conda env create -f environment.yml
 ```
 
+_Note: Pytorch environment should be suitable to your CUDA version. This repository was tested on Pytorch versions 1.11.0 and 1.12.0 for the Nvidia RTX 2080Ti and 3090 GPUs respectively._
+
+## Usage
+
 ## Dataset
 
+1. [Download](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar) the Pascal VOC2012 dataset from the [official website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit)
 
 ## Usage
 
