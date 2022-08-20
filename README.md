@@ -1,13 +1,26 @@
 # Weakly Supervised Semantic Segmentation
 
-## Usage Instructions
+## Installation
+
+This repository is tested on Ubuntu 18.04, using Python 3.7 and Pytorch 1.11 Other environment variables are specified in the `environment.yml` file.
+
+Run the following to create the conda environment to run the repository.
+
+```console
+conda env create -f environment.yml
+```
+
+## Dataset
+
+
+## Usage
 
 ### IRN (VOC2012 dataset)
 
 In `pseudo_mask` directory:
 
 ```python
-conda activate ws
+conda activate wsss
 cd pseudo_mask
 ```
 
@@ -55,13 +68,13 @@ cd segmentation/data/models/imagenet
 gdown https://drive.google.com/uc?id=14soMKDnIZ_crXQTlol9sNHVPozcQQpMn
 ```
 
-```python
+```console
 conda activate deeplab-pytorch
 cd segmentation
 ```
 
-Train Deeplab v2 on PascalVOC2012
-```python
+Train Deeplab v2 on Pascal VOC2012
+```console
 python main.py train --config-path configs/voc12.yaml
 
 python main.py train --config-path configs/coco.yaml
@@ -69,17 +82,15 @@ python main.py train --config-path configs/coco.yaml
 
 Evaluate performance on validation set
 
-```python
+```console
 python main.py test --config-path configs/voc12.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train/checkpoint_final.pth
 
 python main.py test --config-path configs/coco.yaml --model-path output/coco/models/coco/deeplabv2_resnet101_msc/train2014/checkpoint_final.pth
 ```
 
 Evaluate with CRF post-processing
-```python
+```console
 python main.py crf --config-path configs/coco.yaml
 ```
 
-
-python main.py test --config-path configs/voc12_test.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/caffemodel/deeplabv2_resnet101_msc-vocaug.pth
-
+## Acknowledgment

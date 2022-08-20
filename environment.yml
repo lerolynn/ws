@@ -1,4 +1,4 @@
-name: testws
+name: wsss
 
 channels:
   - pytorch
@@ -23,7 +23,6 @@ dependencies:
     - gdown
     
     - cython==0.29.30
-    
     - pycocotools==2.0.4
     - scikit-image==0.19.3
     - torchvision==0.12.0
