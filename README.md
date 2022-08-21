@@ -16,16 +16,43 @@ _Note: Pytorch environment should be suitable to your CUDA version. This reposit
 
 ## Dataset
 
-1. [Download](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar) the Pascal VOC2012 dataset from the [official website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit)
+### PASCAL VOC2012
+
+[Download](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar) and extract the Pascal VOC2012 dataset from the [official website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit)
+
+```console
+cd data
+wget http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
+tar -xvf VOCtrainval_11-May-2012.tar 
+mv VOCdevkit/VOC2012/ VOC2012
+rm -r VOCdevkit/ VOCtrainval_11-May-2012.tar
+```
+
+### MS COCO2014
+
+[Download]() and extract the MS COCO dataset from the offical COCO website
+
+```
+cd coco
+wget http://images.cocodataset.org/zips/train2014.zip http://images.cocodataset.org/zips/val2014.zip http://images.cocodataset.org/annotations/annotations_trainval2014.zip
+unzip train2014.zip ; unzip val2014.zip ; unzip annotations_trainval2014.zip
+
+rm train2014.zip val2014.zip annotations_trainval2014.zip
+```
 
 ## Usage
+
+Activate the environment variables
+```
+conda activate wsss
+```
 
 ### IRN (VOC2012 dataset)
 
 In `pseudo_mask` directory:
 
 ```python
-conda activate wsss
+
 cd pseudo_mask
 ```
 

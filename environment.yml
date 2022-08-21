@@ -20,7 +20,7 @@ dependencies:
     - omegaconf==2.2.3
     - tensorflow==2.9.1
     - torchnet==0.0.4
-    - opencv-python==4.6.0
+    - opencv-python==4.6.0.66
     - cython==0.29.30
     - pycocotools==2.0.4
     - torchvision==0.12.0
