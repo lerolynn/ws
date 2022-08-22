@@ -10,6 +10,8 @@ import os
 import imageio
 
 import voc12.dataloader
+import coco14.dataloader
+
 from misc import torchutils, indexing
 
 cudnn.enabled = True
@@ -35,6 +37,17 @@ def _work(process_id, model, dataset, args):
 
             cams = cam_dict['cam']
             keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
+            
+            # Directly save masks with just background class
+            if keys.shape[0] == 1:
+                conf = np.zeros_like(pack['img'][0])[0, 0]
+                imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), conf.astype(np.uint8))
+                continue
+
+            # Skip cams that take more gpu memory than available
+            # if cams.shape[1] * cams.shape[2] > 21920:
+            #     print(img_name, cams.shape, cams.shape[1]*cams.shape[2])
+            #     continue
 
             cam_downsized_values = cams.cuda()
 
@@ -61,8 +74,13 @@ def run(args):
 
     n_gpus = torch.cuda.device_count()
 
-    dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.infer_list,
+    if args.voc:
+        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.infer_list,
                                                              voc12_root=args.voc12_root,
+                                                             scales=(1.0,))
+    else:                                                         
+        dataset = coco14.dataloader.COCO14ClassificationDatasetMSF(args.infer_list,
+                                                             coco14_root=args.coco14_root,
                                                              scales=(1.0,))
     dataset = torchutils.split_dataset(dataset, n_gpus)
 

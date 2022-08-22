@@ -9,6 +9,8 @@ import importlib
 import os
 
 import voc12.dataloader
+import coco14.dataloader
+
 from misc import torchutils, imutils
 
 cudnn.enabled = True
@@ -66,8 +68,13 @@ def run(args):
 
     n_gpus = torch.cuda.device_count()
 
-    dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
+    if args.voc:
+        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
                                                              voc12_root=args.voc12_root, scales=args.cam_scales)
+    else:
+        dataset = coco14.dataloader.COCO14ClassificationDatasetMSF(args.train_list,
+                                                             coco14_root=args.coco14_root, scales=args.cam_scales)
+    
     dataset = torchutils.split_dataset(dataset, n_gpus)
 
     print('[ ', end='')

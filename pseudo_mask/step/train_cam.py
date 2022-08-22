@@ -8,6 +8,8 @@ import torch.nn.functional as F
 import importlib
 
 import voc12.dataloader
+import coco14.dataloader
+
 from misc import pyutils, torchutils
 
 
@@ -37,21 +39,30 @@ def validate(model, data_loader):
 
 
 def run(args):
-
-    model = getattr(importlib.import_module(args.cam_network), 'Net')()
-
-
-    train_dataset = voc12.dataloader.VOC12ClassificationDataset(args.train_list, voc12_root=args.voc12_root,
+    if args.voc:
+        model = getattr(importlib.import_module(args.cam_network), 'Net')()
+        train_dataset = voc12.dataloader.VOC12ClassificationDataset(args.train_list, voc12_root=args.voc12_root,
+                                                                    resize_long=(320, 640), hor_flip=True,
+                                                                    crop_size=512, crop_method="random")
+    else:
+        model = getattr(importlib.import_module(args.cam_network), 'Net')(n_classes=80)
+        train_dataset = coco14.dataloader.COCO14ClassificationDataset(args.train_list, coco14_root=args.coco14_root,
                                                                 resize_long=(320, 640), hor_flip=True,
                                                                 crop_size=512, crop_method="random")
+    
     train_data_loader = DataLoader(train_dataset, batch_size=args.cam_batch_size,
-                                   shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
+                                    shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
     max_step = (len(train_dataset) // args.cam_batch_size) * args.cam_num_epoches
-
-    val_dataset = voc12.dataloader.VOC12ClassificationDataset(args.val_list, voc12_root=args.voc12_root,
-                                                              crop_size=512)
+    
+    if args.voc: 
+        val_dataset = voc12.dataloader.VOC12ClassificationDataset(args.val_list, voc12_root=args.voc12_root,
+                                                                crop_size=512)
+    else:
+        val_dataset = coco14.dataloader.COCO14ClassificationDataset(args.val_list, coco14_root=args.coco14_root,
+                                                              crop_size=512, train=False)
+    
     val_data_loader = DataLoader(val_dataset, batch_size=args.cam_batch_size,
-                                 shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
+                                    shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
     param_groups = model.trainable_parameters()
     optimizer = torchutils.PolyOptimizer([
