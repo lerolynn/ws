@@ -19,10 +19,10 @@ def _work(process_id, infer_dataset, args):
 
     for iter, pack in enumerate(infer_data_loader):
 
-        if args.voc:
-            img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
-        else:
+        if args.coco:
             img_name = coco14.dataloader.decode_int_filename(pack['name'][0])
+        else:
+            img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
         
         img = pack['img'][0].numpy()
         cam_dict = np.load(os.path.join(args.cam_out_dir, img_name + '.npy'), allow_pickle=True).item()
@@ -59,10 +59,11 @@ def _work(process_id, infer_dataset, args):
             print("%d " % ((5 * iter + 1) // (len(databin) // 20)), end='')
 
 def run(args):
-    if args.voc:
-        dataset = voc12.dataloader.VOC12ImageDataset(args.train_list, voc12_root=args.voc12_root, img_normal=None, to_torch=False)
-    else:
+
+    if args.coco:
         dataset = coco14.dataloader.COCO14ImageDataset(args.train_list, coco14_root=args.coco14_root, img_normal=None, to_torch=False)
+    else:
+        dataset = voc12.dataloader.VOC12ImageDataset(args.train_list, voc12_root=args.voc12_root, img_normal=None, to_torch=False)
     
     dataset = torchutils.split_dataset(dataset, args.num_workers)
 

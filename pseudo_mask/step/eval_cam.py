@@ -9,20 +9,8 @@ from tqdm import tqdm
 
 def run(args):
     preds = []
-    if args.voc:
-        dataset = VOCSemanticSegmentationDataset(split=args.chainer_eval_set, data_dir=args.voc12_root)
-        labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
-        
-        for i, id in enumerate(tqdm(dataset.ids)):
-            cam_dict = np.load(os.path.join(args.cam_out_dir, id + '.npy'), allow_pickle=True).item()
-            cams = cam_dict['high_res']
-            cams = np.pad(cams, ((1, 0), (0, 0), (0, 0)), mode='constant', constant_values=args.cam_eval_thres)
-            keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
-            cls_labels = np.argmax(cams, axis=0)
-            cls_labels = keys[cls_labels]
-            preds.append(cls_labels.copy())
 
-    else:
+    if args.coco:
         ids = open('coco14/train2014.txt').readlines()
         ids = [i.split('\n')[0] for i in ids]
         labels = []
@@ -46,6 +34,19 @@ def run(args):
             xx, yy = cls_labels.shape, label.shape
             if xx[0] != yy[0]:
                 print(id, xx, yy)
+
+    else:
+        dataset = VOCSemanticSegmentationDataset(split=args.chainer_eval_set, data_dir=args.voc12_root)
+        labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
+        
+        for i, id in enumerate(tqdm(dataset.ids)):
+            cam_dict = np.load(os.path.join(args.cam_out_dir, id + '.npy'), allow_pickle=True).item()
+            cams = cam_dict['high_res']
+            cams = np.pad(cams, ((1, 0), (0, 0), (0, 0)), mode='constant', constant_values=args.cam_eval_thres)
+            keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
+            cls_labels = np.argmax(cams, axis=0)
+            cls_labels = keys[cls_labels]
+            preds.append(cls_labels.copy())
     
     confusion = calc_semantic_segmentation_confusion(preds, labels)
 

@@ -11,23 +11,26 @@ if __name__ == '__main__':
     parser.add_argument("--num_workers", default=os.cpu_count()//2, type=int)
 
     # Default - VOC, if COCO
-    parser.add_argument("--voc", action='store_true')
+    parser.add_argument("--coco", action='store_true')
 
     parser.add_argument("--voc12_root", default="../data/VOC2012", type=str)                        
     parser.add_argument("--coco14_root", default="../data/coco2014", type=str)
-    args = parser.parse_args()
-    # Dataset
 
-    if args.voc:
+    args = parser.parse_args()
+    
+    # Dataset
+    if args.coco:
+        parser.add_argument("--train_list", default="coco14/train2014.txt", type=str)
+        parser.add_argument("--val_list", default="coco14/val2014.txt", type=str)
+        parser.add_argument("--infer_list", default="coco14/train2014.txt", type=str)
+
+    else:
         parser.add_argument("--train_list", default="voc12/train_aug.txt", type=str)
         parser.add_argument("--val_list", default="voc12/val.txt", type=str)
         parser.add_argument("--infer_list", default="voc12/train.txt", type=str,
                             help="voc12/train_aug.txt to train a fully supervised model, "
                                 "voc12/train.txt or voc12/val.txt to quickly check the quality of the labels.")
-    else:
-        parser.add_argument("--train_list", default="coco14/train2014.txt", type=str)
-        parser.add_argument("--val_list", default="coco14/val2014.txt", type=str)
-        parser.add_argument("--infer_list", default="coco14/train2014.txt", type=str)
+
     parser.add_argument("--chainer_eval_set", default="train", type=str)
 
     # Class Activation Map
@@ -62,10 +65,12 @@ if __name__ == '__main__':
     parser.add_argument("--sem_seg_bg_thres", default=0.25)
 
     # Output Path
-    if args.voc:
-        output_split = "voc"
+    if args.coco:
+        output_split = "coco14"
+        
     else:
-        output_split = "coco"
+        output_split = "voc12"
+
     parser.add_argument("--log_name", default="{}_sample_train_eval".format(output_split), type=str)
     parser.add_argument("--cam_weights_name", default="sess/{}/res50_cam.pth".format(output_split), type=str)
     parser.add_argument("--irn_weights_name", default="sess/{}/res50_irn.pth".format(output_split), type=str)
@@ -87,7 +92,12 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
 
-    os.makedirs("sess", exist_ok=True)
+    if args.coco:
+        os.makedirs("sess/coco14", exist_ok=True)
+        
+    else:
+        os.makedirs("sess/voc12", exist_ok=True)
+
     os.makedirs(args.cam_out_dir, exist_ok=True)
     os.makedirs(args.ir_label_out_dir, exist_ok=True)
     os.makedirs(args.sem_seg_out_dir, exist_ok=True)
@@ -96,14 +106,12 @@ if __name__ == '__main__':
     pyutils.Logger(args.log_name + '.log')
     print(vars(args))
 
-
+    if args.coco:
+        print("Running IRN for COCO")         
+    else:
+        print("Running IRN for VOC")
 
     if args.train_cam_pass is True:
-
-        if args.voc:
-            print("Running IRN for VOC")
-        else:
-            print("Running IRN for COCO")
         import step.train_cam
 
         timer = pyutils.Timer('step.train_cam:')

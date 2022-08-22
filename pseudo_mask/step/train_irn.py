@@ -15,18 +15,7 @@ def run(args):
     model = getattr(importlib.import_module(args.irn_network), 'AffinityDisplacementLoss')(
         path_index)
 
-    if args.voc:
-        train_dataset = voc12.dataloader.VOC12AffinityDataset(args.train_list,
-                                                            label_dir=args.ir_label_out_dir,
-                                                            voc12_root=args.voc12_root,
-                                                            indices_from=path_index.src_indices,
-                                                            indices_to=path_index.dst_indices,
-                                                            hor_flip=True,
-                                                            crop_size=args.irn_crop_size,
-                                                            crop_method="random",
-                                                            rescale=(0.5, 1.5)
-                                                            )
-    else:
+    if args.coco:
         train_dataset = coco14.dataloader.COCO14AffinityDataset(args.train_list,
                                                           label_dir=args.ir_label_out_dir,
                                                           coco14_root=args.coco14_root,
@@ -37,6 +26,19 @@ def run(args):
                                                           crop_method="random",
                                                           rescale=(0.5, 1.5)
                                                           )
+
+    else:
+        train_dataset = voc12.dataloader.VOC12AffinityDataset(args.train_list,
+                                                            label_dir=args.ir_label_out_dir,
+                                                            voc12_root=args.voc12_root,
+                                                            indices_from=path_index.src_indices,
+                                                            indices_to=path_index.dst_indices,
+                                                            hor_flip=True,
+                                                            crop_size=args.irn_crop_size,
+                                                            crop_method="random",
+                                                            rescale=(0.5, 1.5)
+                                                            )
+
     train_data_loader = DataLoader(train_dataset, batch_size=args.irn_batch_size,
                                    shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
@@ -97,15 +99,15 @@ def run(args):
         else:
             timer.reset_stage()
 
-    if args.voc:
-        infer_dataset = voc12.dataloader.VOC12ImageDataset(args.infer_list,
-                                                    voc12_root=args.voc12_root,
-                                                    crop_size=args.irn_crop_size,
-                                                    crop_method="top_left")
-    
-    else:
+    if args.coco:
         infer_dataset = coco14.dataloader.COCO14ImageDataset(args.infer_list,
                                                     coco14_root=args.coco14_root,
+                                                    crop_size=args.irn_crop_size,
+                                                    crop_method="top_left")
+
+    else:
+        infer_dataset = voc12.dataloader.VOC12ImageDataset(args.infer_list,
+                                                    voc12_root=args.voc12_root,
                                                     crop_size=args.irn_crop_size,
                                                     crop_method="top_left")
     

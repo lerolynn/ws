@@ -8,15 +8,7 @@ from PIL import Image
 
 def run(args):
     preds = []
-    if args.voc:
-        dataset = VOCSemanticSegmentationDataset(split=args.chainer_eval_set, data_dir=args.voc12_root)
-        labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
-        for id in dataset.ids:
-            cls_labels = imageio.imread(os.path.join(args.sem_seg_out_dir, id + '.png')).astype(np.uint8)
-            cls_labels[cls_labels == 255] = 0
-            preds.append(cls_labels.copy())
-
-    else:
+    if args.coco:
         ids = open('coco14/train2014_semseg.txt').readlines()
         ids = [i.split('\n')[0] for i in ids]
         labels = []
@@ -28,7 +20,15 @@ def run(args):
             cls_labels[cls_labels == 255] = 0
             preds.append(cls_labels.copy())
             labels.append(label)
-            n_img += 1   
+            n_img += 1  
+
+    else:
+        dataset = VOCSemanticSegmentationDataset(split=args.chainer_eval_set, data_dir=args.voc12_root)
+        labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
+        for id in dataset.ids:
+            cls_labels = imageio.imread(os.path.join(args.sem_seg_out_dir, id + '.png')).astype(np.uint8)
+            cls_labels[cls_labels == 255] = 0
+            preds.append(cls_labels.copy())
 
     confusion = calc_semantic_segmentation_confusion(preds, labels)[:21, :21]
 
@@ -39,7 +39,7 @@ def run(args):
     fp = 1. - gtj / denominator
     fn = 1. - resj / denominator
     iou = gtjresj / denominator
-    
+
     print("total images", n_img)
     print(fp[0], fn[0])
     print(np.mean(fp[1:]), np.mean(fn[1:]))
