@@ -21,7 +21,6 @@ _Note: Pytorch environment should be suitable to your CUDA version. This reposit
 In the root directory, run `setup.sh` to to download the PASCAL VOC2012 and the MS COCO2014 datasets and setup the directory hierarchy as specified [here](./data/README.md)
 
 ```console
-chmod +x setup.sh
 ./setup.sh
 ```
 
