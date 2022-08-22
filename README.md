@@ -6,46 +6,39 @@ This repository runs the full Weakly Supervised Semantic Segmentaiton pipeline f
 
 This repository is tested on Ubuntu 18.04, using Python 3.7 and Pytorch >= 1.11 Other environment variables are as specified in the `environment.yml` file.
 
-### Setup
+_Note: Pytorch environment should be suitable to your CUDA version. This repository was tested on Pytorch versions 1.11.0 and 1.12.0 for the Nvidia RTX 2080Ti and 3090 GPUs respectively._
+
+---
+
+### Quick Setup
 
 To setup the environment variables and install the required datasets, run `setup.sh` in the root directory of the repository.
-
-This script 
- to download the PASCAL VOC2012 and the MS COCO2014 datasets and setup the directory hierarchy as specified [here](./data/README.md)
-
 
 ```console
 ./setup.sh
 ```
 
-_Note: Pytorch environment should be suitable to your CUDA version. This repository was tested on Pytorch versions 1.11.0 and 1.12.0 for the Nvidia RTX 2080Ti and 3090 GPUs respectively._
-## Usage
+The setup script is configured to set up the Anaconda environment, download the PASCAL VOC2012, the MS COCO2014 datasets and the pretrained segmentation weights and to 
 
-#### PASCAL VOC2012
+---
 
-[Download](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar) and extract the Pascal VOC2012 dataset from the [official website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit).
+#### Setup Steps:
 
+1. Install and setup the Conda environment `wsss`
+2. The datasets are downloaded and moved to the folders as specified in the directory hierarchy [here](./data/README.md). More information on the datasets is located in the [README](./data/README.md) of the data folder.
 
-#### MS COCO2014
+   * Pascal VOC2012 is downloaded from the official [Pascal VOC website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit)
+   * MS COCO dataset is downloaded from the offical [COCO website](https://cocodataset.org/#download)
 
-Download and extract the MS COCO dataset from the offical [COCO website](https://cocodataset.org/#download).
+3. While VOC provides segmentation masks as images, COCO ground truth segmentation masks have to be converted from the annotation files by running:
 
-
-_Further information on the dataset and the data root folder is located [here](./data/README.md)._
-
-
-
-## Pretrained Weights
-
-Download the pretrained weights for segmentation
-In `segmentation` directory:
-
-To download weights pretrained on imagenet for segmentation
 ```
-cd segmentation/data/models/imagenet
-gdown https://drive.google.com/uc?id=14soMKDnIZ_crXQTlol9sNHVPozcQQpMn
+python utils/coco_ann_to_mask.py
 ```
+4. Download weights used for the segmentation model are pretrained on the ImageNet dataset for fair comparison, and are provided by the authors of [RIB](https://github.com/jbeomlee93/RIB).
 
+
+---
 
 ## Usage
 

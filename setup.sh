@@ -32,3 +32,9 @@ unzip data/coco2014/annotations_trainval2014.zip -d data/coco2014
 rm data/coco2014/annotations_trainval2014.zip 
 mv ./data/coco2014/annotations ./data/coco2014/Annotations
 # ----------------------------------------------
+
+# Download pretrained weights for segmentation
+gdown -O segmentation/data/models/imagenet/ https://drive.google.com/uc?id=14LLCDNbw8H9RqZE5zkwECu6gKN-8uhg7
+
+# Convert COCO annotations into segmentation masks
+python utils/coco_ann_to_mask.py

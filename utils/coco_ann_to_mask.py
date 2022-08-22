@@ -54,6 +54,9 @@ def work(process_id, infer_dataset, coco, mask_path):
         imageio.imsave(os.path.join(mask_path, str(imgId).rjust(12, '0') + '.png'), labelMap.astype(np.uint8))
 
 if __name__ == '__main__':
+
+    print("Converting COCO annotations into Segmentation Masks")
+
     annFile = './data/coco2014/Annotations/instances_train2014.json'
     mask_path = './data/coco2014/gt_mask/train2014'
     os.makedirs(mask_path, exist_ok=True)
