@@ -63,7 +63,7 @@ if __name__ == '__main__':
     coco = COCO(annFile)
     num_workers = 2
     ids = list(coco.imgs.keys())
-    print(len(ids))
+    print("Generating {} gt segmentation masks".format(len(ids)))
     num_per_worker = (len(ids)//num_workers) + 1
     dataset = [ ids[i*num_per_worker:(i+1)*num_per_worker] for i in range(num_workers)]
     multiprocessing.spawn(work, nprocs=num_workers, args=(dataset,coco,mask_path), join=True)
@@ -73,7 +73,7 @@ if __name__ == '__main__':
     os.makedirs(mask_path, exist_ok=True)
     coco = COCO(annFile)
     ids = list(coco.imgs.keys())
-    print(len(ids))
+    print("Generating {} gt segmentation masks".format(len(ids)))
     num_per_worker = (len(ids)//num_workers) + 1
     dataset = [ ids[i*num_per_worker:(i+1)*num_per_worker] for i in range(num_workers)]
     multiprocessing.spawn(work, nprocs=num_workers, args=(dataset,coco,mask_path), join=True)

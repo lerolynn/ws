@@ -6,16 +6,15 @@ channels:
 dependencies:
   - python=3.7
   - pytorch
+  - torchvision
   - click
   - pip
 
   - pip:
-    - numpy==1.21
     - imageio==2.19
     - chainercv==0.13
     - git+https://github.com/lucasb-eyer/pydensecrf.git
     - scikit-image==0.19.3
-
     - joblib==1.1.0
     - omegaconf==2.2.3
     - tensorflow==2.9.1
@@ -23,7 +22,5 @@ dependencies:
     - opencv-python==4.6.0.66
     - cython==0.29.30
     - pycocotools==2.0.4
-    - torchvision==0.12.0
     - tqdm
-
     - gdown
