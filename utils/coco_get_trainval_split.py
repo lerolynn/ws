@@ -24,7 +24,7 @@ def work(subdir):
         filenames.append(path.split(".")[0].split("_")[-1])
 
     filenames.sort()
-    print(len(filenames))
+    print("Size of {} split: ".format(subdir), len(filenames))
 
     for filename in filenames:
         file_object.write(str(filename + "\n"))
