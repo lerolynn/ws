@@ -1,5 +1,7 @@
 # Weakly Supervised Semantic Segmentation
 
+This repository runs the full Weakly Supervised Semantic Segmentaiton pipeline based 
+
 ## Installation
 
 This repository is tested on Ubuntu 18.04, using Python 3.7 and Pytorch >= 1.11 Other environment variables are as specified in the `environment.yml` file.
@@ -14,31 +16,52 @@ _Note: Pytorch environment should be suitable to your CUDA version. This reposit
 
 ## Usage
 
-## Dataset
+### Dataset
 
-### PASCAL VOC2012
+In the root directory, run `setup.sh` to to download the PASCAL VOC2012 and the MS COCO2014 datasets and setup the directory hierarchy as specified [here](./data/README.md)
 
-[Download](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar) and extract the Pascal VOC2012 dataset from the [official website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit)
+```console
+chmod +x setup.sh
+./setup.sh
+```
+
+#### PASCAL VOC2012
+
+[Download](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar) and extract the Pascal VOC2012 dataset from the [official website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit).
 
 ```console
 cd data
-wget http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
-tar -xvf VOCtrainval_11-May-2012.tar 
-mv VOCdevkit/VOC2012/ VOC2012
-rm -r VOCdevkit/ VOCtrainval_11-May-2012.tar
+
+wget -P data http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
+tar -xvf VOCtrainval_11-May-2012.tar ; mv VOCdevkit/VOC2012/ VOC2012 ; rm -r VOCdevkit/ VOCtrainval_11-May-2012.tar
 ```
 
-### MS COCO2014
+#### MS COCO2014
 
-[Download]() and extract the MS COCO dataset from the offical COCO website
+Download and extract the MS COCO dataset from the offical [COCO website](https://cocodataset.org/#download).
+
+```console
+cd data/coco
+
+wget http://images.cocodataset.org/zips/train2014.zip http://images.cocodataset.org/zips/val2014.zip http://images.cocodataset.org/annotations/annotations_trainval2014.zip ; unzip train2014.zip ; unzip val2014.zip ; unzip annotations_trainval2014.zip ; rm train2014.zip val2014.zip annotations_trainval2014.zip
+
+mkdir JPEGImages ; mv train2014 JPEGImages/train2014 ; mv val2014 JPEGImages/val2014 ; mv annotations Annotations
 
 ```
-cd coco
-wget http://images.cocodataset.org/zips/train2014.zip http://images.cocodataset.org/zips/val2014.zip http://images.cocodataset.org/annotations/annotations_trainval2014.zip
-unzip train2014.zip ; unzip val2014.zip ; unzip annotations_trainval2014.zip
 
-rm train2014.zip val2014.zip annotations_trainval2014.zip
+_Further information on the dataset and the data root folder is located [here](./data/README.md)._
+
+## Pretrained Weights
+
+Download the pretrained weights for segmentation
+In `segmentation` directory:
+
+To download weights pretrained on imagenet for segmentation
 ```
+cd segmentation/data/models/imagenet
+gdown https://drive.google.com/uc?id=14soMKDnIZ_crXQTlol9sNHVPozcQQpMn
+```
+
 
 ## Usage
 
@@ -91,14 +114,6 @@ python run_sample.py \
 ```
 
 ### Segmentation
-
-In `segmentation` directory:
-
-To download weights pretrained on imagenet for segmentation
-```
-cd segmentation/data/models/imagenet
-gdown https://drive.google.com/uc?id=14soMKDnIZ_crXQTlol9sNHVPozcQQpMn
-```
 
 ```console
 conda activate deeplab-pytorch

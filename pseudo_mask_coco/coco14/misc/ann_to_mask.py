@@ -41,7 +41,7 @@ def work(process_id, infer_dataset, coco, mask_path):
 
 if __name__ == '__main__':
     annFile = '../../../data/coco2014/Annotations/instances_train2014.json'
-    mask_path = '../../../data/coco2014/mask/train2014'
+    mask_path = '../../../data/coco2014/gt_mask/train2014'
     os.makedirs(mask_path, exist_ok=True)
     coco = COCO(annFile)
     num_workers = 2
@@ -52,7 +52,7 @@ if __name__ == '__main__':
     multiprocessing.spawn(work, nprocs=num_workers, args=(dataset,coco,mask_path), join=True)
 
     annFile = '../../../data/coco2014/Annotations/instances_val2014.json'
-    mask_path = '../../../data/coco2014/mask/val2014'
+    mask_path = '../../../data/coco2014/gt_mask/val2014'
     os.makedirs(mask_path, exist_ok=True)
     coco = COCO(annFile)
     ids = list(coco.imgs.keys())
