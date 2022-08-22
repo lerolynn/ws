@@ -1,6 +1,7 @@
 #!/bin/bash
 
 conda env create -f environment.yml
+conda activate wsss
 
 # Download Pascal VOC2012
 wget -P ./data http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
@@ -13,7 +14,7 @@ rm -r ./data/VOCdevkit/ ./data/VOCtrainval_11-May-2012.tar
 # -------------------------
 
 # Download MS COCO
-mkdir -p data/JPEGImages
+mkdir -p data/coco2014/JPEGImages
 
 wget -P ./data/coco2014/JPEGImages http://images.cocodataset.org/zips/train2014.zip 
 unzip data/coco2014/JPEGImages/train2014.zip -d data/coco2014/JPEGImages

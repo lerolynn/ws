@@ -1,52 +1,35 @@
 # Weakly Supervised Semantic Segmentation
 
-This repository runs the full Weakly Supervised Semantic Segmentaiton pipeline based 
+This repository runs the full Weakly Supervised Semantic Segmentaiton pipeline following the method of [IRNet](hhttps://github.com/jiwoon-ahn/irn)
 
 ## Installation
 
 This repository is tested on Ubuntu 18.04, using Python 3.7 and Pytorch >= 1.11 Other environment variables are as specified in the `environment.yml` file.
 
-Run the following to create the conda environment to run the repository.
+### Setup
 
-```console
-conda env create -f environment.yml
-```
+To setup the environment variables and install the required datasets, run `setup.sh` in the root directory of the repository.
 
-_Note: Pytorch environment should be suitable to your CUDA version. This repository was tested on Pytorch versions 1.11.0 and 1.12.0 for the Nvidia RTX 2080Ti and 3090 GPUs respectively._
+This script 
+ to download the PASCAL VOC2012 and the MS COCO2014 datasets and setup the directory hierarchy as specified [here](./data/README.md)
 
-## Usage
-
-### Dataset
-
-In the root directory, run `setup.sh` to to download the PASCAL VOC2012 and the MS COCO2014 datasets and setup the directory hierarchy as specified [here](./data/README.md)
 
 ```console
 ./setup.sh
 ```
 
+_Note: Pytorch environment should be suitable to your CUDA version. This repository was tested on Pytorch versions 1.11.0 and 1.12.0 for the Nvidia RTX 2080Ti and 3090 GPUs respectively._
+## Usage
+
 #### PASCAL VOC2012
 
 [Download](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar) and extract the Pascal VOC2012 dataset from the [official website](http://host.robots.ox.ac.uk/pascal/VOC/voc2012/#devkit).
 
-```console
-cd data
-
-wget -P data http://host.robots.ox.ac.uk/pascal/VOC/voc2012/VOCtrainval_11-May-2012.tar
-tar -xvf VOCtrainval_11-May-2012.tar ; mv VOCdevkit/VOC2012/ VOC2012 ; rm -r VOCdevkit/ VOCtrainval_11-May-2012.tar
-```
 
 #### MS COCO2014
 
 Download and extract the MS COCO dataset from the offical [COCO website](https://cocodataset.org/#download).
 
-```console
-cd data/coco
-
-wget http://images.cocodataset.org/zips/train2014.zip http://images.cocodataset.org/zips/val2014.zip http://images.cocodataset.org/annotations/annotations_trainval2014.zip ; unzip train2014.zip ; unzip val2014.zip ; unzip annotations_trainval2014.zip ; rm train2014.zip val2014.zip annotations_trainval2014.zip
-
-mkdir JPEGImages ; mv train2014 JPEGImages/train2014 ; mv val2014 JPEGImages/val2014 ; mv annotations Annotations
-
-```
 
 _Further information on the dataset and the data root folder is located [here](./data/README.md)._
 
