@@ -1,3 +1,17 @@
+"""
+coco_ann_to_mask.py
+
+This file converts the annotations of the COCO dataset for 
+train and val data into segmentation masks.
+
+Loads:
+train masks from Annotations/instances_train2014.json into gt_mask/train2014 
+val mask into gt_mask/val2014
+
+"""
+
+
+
 import os
 import imageio
 import numpy as np
@@ -40,8 +54,8 @@ def work(process_id, infer_dataset, coco, mask_path):
         imageio.imsave(os.path.join(mask_path, str(imgId).rjust(12, '0') + '.png'), labelMap.astype(np.uint8))
 
 if __name__ == '__main__':
-    annFile = '../../../data/coco2014/Annotations/instances_train2014.json'
-    mask_path = '../../../data/coco2014/gt_mask/train2014'
+    annFile = './data/coco2014/Annotations/instances_train2014.json'
+    mask_path = './data/coco2014/gt_mask/train2014'
     os.makedirs(mask_path, exist_ok=True)
     coco = COCO(annFile)
     num_workers = 2
@@ -51,8 +65,8 @@ if __name__ == '__main__':
     dataset = [ ids[i*num_per_worker:(i+1)*num_per_worker] for i in range(num_workers)]
     multiprocessing.spawn(work, nprocs=num_workers, args=(dataset,coco,mask_path), join=True)
 
-    annFile = '../../../data/coco2014/Annotations/instances_val2014.json'
-    mask_path = '../../../data/coco2014/gt_mask/val2014'
+    annFile = './data/coco2014/Annotations/instances_val2014.json'
+    mask_path = './data/coco2014/gt_mask/val2014'
     os.makedirs(mask_path, exist_ok=True)
     coco = COCO(annFile)
     ids = list(coco.imgs.keys())
