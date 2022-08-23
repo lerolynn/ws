@@ -8,11 +8,12 @@ from PIL import Image
 
 def run(args):
     preds = []
+    n_labels = 0
     if args.coco:
         ids = open('coco14/train2014_semseg.txt').readlines()
         ids = [i.split('\n')[0] for i in ids]
         labels = []
-        n_img = 0
+        
 
         for i, id in enumerate(ids):
             label = np.array(Image.open('../data/coco2014/mask/train2014/%s.png' % id))
@@ -20,7 +21,7 @@ def run(args):
             cls_labels[cls_labels == 255] = 0
             preds.append(cls_labels.copy())
             labels.append(label)
-            n_img += 1  
+            n_labels += 1  
 
     else:
         dataset = VOCSemanticSegmentationDataset(split=args.chainer_eval_set, data_dir=args.voc12_root)
@@ -29,6 +30,7 @@ def run(args):
             cls_labels = imageio.imread(os.path.join(args.sem_seg_out_dir, id + '.png')).astype(np.uint8)
             cls_labels[cls_labels == 255] = 0
             preds.append(cls_labels.copy())
+            n_labels += 1
 
     confusion = calc_semantic_segmentation_confusion(preds, labels)[:21, :21]
 
@@ -40,7 +42,7 @@ def run(args):
     fn = 1. - resj / denominator
     iou = gtjresj / denominator
 
-    print("total images", n_img)
+    print("Total labels generated: ", n_labels)
     print(fp[0], fn[0])
     print(np.mean(fp[1:]), np.mean(fn[1:]))
 
