@@ -114,7 +114,7 @@ def train(config_path, cuda):
     torch.backends.cudnn.benchmark = True
 
     # Dataset
-    dataset = get_dataset(CONFIG.DATASET.NAME_PSEUDO)(
+    dataset = get_dataset(CONFIG.DATASET.TRAIN_NAME)(
         root=CONFIG.DATASET.ROOT,
         split=CONFIG.DATASET.SPLIT.TRAIN,
         ignore_label=CONFIG.DATASET.IGNORE_LABEL,

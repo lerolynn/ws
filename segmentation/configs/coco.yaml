@@ -4,7 +4,7 @@ EXP:
 
 DATASET:
     NAME: coco
-    NAME_PSEUDO: pseudococo
+    TRAIN_NAME: pseudococo
     ROOT: ../data
     LABELS: ./data/datasets/coco/labels.txt
     N_CLASSES: 81

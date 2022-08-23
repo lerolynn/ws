@@ -4,7 +4,7 @@ EXP:
 
 DATASET:
     NAME: voc
-    NAME_PSEUDO: pseudovoc
+    TRAIN_NAME: pseudovoc
     ROOT: ../data
     LABELS: ./data/datasets/voc12/labels.txt
     N_CLASSES: 21

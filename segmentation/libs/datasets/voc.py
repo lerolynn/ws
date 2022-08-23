@@ -64,7 +64,7 @@ class pseudoVOC(_BaseDataset):
     def _set_files(self):
         self.root = osp.join(self.root, "VOC{}".format(self.year))
         self.image_dir = osp.join(self.root, "JPEGImages")
-        self.label_dir = osp.join(self.root, "SegmentationClass_pseudo")
+        self.label_dir = osp.join(self.root, "pseudo_mask")
 
         if self.split in ["train", "trainval", "val", "test"]:
             file_list = osp.join(
