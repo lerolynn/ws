@@ -50,8 +50,8 @@ class Net(nn.Module):
 
 class CAM(Net):
 
-    def __init__(self):
-        super(CAM, self).__init__()
+    def __init__(self, n_classes=20):
+        super(CAM, self).__init__(n_classes=n_classes)
 
     def forward(self, x):
 
