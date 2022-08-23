@@ -6,6 +6,7 @@ from torch.utils.data import DataLoader
 import torch.nn.functional as F
 
 import importlib
+from tqdm import tqdm
 
 import voc12.dataloader
 import coco14.dataloader
@@ -79,11 +80,11 @@ def run(args):
 
     timer = pyutils.Timer()
 
-    for ep in range(args.cam_num_epoches):
+    for ep in tqdm(range(args.cam_num_epoches)):
 
-        print('Epoch %d/%d' % (ep+1, args.cam_num_epoches))
+        # print('Epoch %d/%d' % (ep+1, args.cam_num_epoches))
 
-        for step, pack in enumerate(train_data_loader):
+        for step, pack in tqdm(enumerate(train_data_loader)):
 
             img = pack['img']
             label = pack['label'].cuda(non_blocking=True)
@@ -97,14 +98,14 @@ def run(args):
             loss.backward()
             optimizer.step()
 
-            if (optimizer.global_step-1)%100 == 0:
-                timer.update_progress(optimizer.global_step / max_step)
+            # if (optimizer.global_step-1)%100 == 0:
+            #     timer.update_progress(optimizer.global_step / max_step)
 
-                print('step:%5d/%5d' % (optimizer.global_step - 1, max_step),
-                      'loss:%.4f' % (avg_meter.pop('loss1')),
-                      'imps:%.1f' % ((step + 1) * args.cam_batch_size / timer.get_stage_elapsed()),
-                      'lr: %.4f' % (optimizer.param_groups[0]['lr']),
-                      'etc:%s' % (timer.str_estimated_complete()), flush=True)
+            #     print('step:%5d/%5d' % (optimizer.global_step - 1, max_step),
+            #           'loss:%.4f' % (avg_meter.pop('loss1')),
+            #           'imps:%.1f' % ((step + 1) * args.cam_batch_size / timer.get_stage_elapsed()),
+            #           'lr: %.4f' % (optimizer.param_groups[0]['lr']),
+            #           'etc:%s' % (timer.str_estimated_complete()), flush=True)
 
         else:
             validate(model, val_data_loader)
