@@ -66,7 +66,7 @@ def run(args):
         model = getattr(importlib.import_module(args.cam_network), 'CAM')(n_classes=80)
     else:
         model = getattr(importlib.import_module(args.cam_network), 'CAM')()
-    model.load_state_dict(torch.load(args.cam_weights_name + '.pth'), strict=True)
+    model.load_state_dict(torch.load(args.cam_weights_name), strict=True)
     model.eval()
 
     n_gpus = torch.cuda.device_count()

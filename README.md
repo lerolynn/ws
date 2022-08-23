@@ -47,33 +47,43 @@ DeepLab-v2 is used to perform Semantic Segmentation, with ground-truth labels us
 
 ### IRN
 
+
+
 #### VOC2012 dataset
 
 To obtain pseudo-labels for the VOC2012 dataset, in the `pseudo_mask` directory, run:
 
 ```python
 # Run IRN
-python run_sample.py --voc12_root ../data/VOC2012
-# Move pseudo-labels to the data directory
-mv result/sem_seg ../data/VOC2012/pseudo_mask
+python run_sample.py
+
+# Move pseudo-labels to the VOC2012 data directory
+mv result/voc12/sem_seg ../data/VOC2012/pseudo_mask
 ```
 
 #### COCO2014 dataset
 
-To obtain pseudo-labels for the COCO2014 dataset, in the `pseudo_mask_coco` directory, run:
+To obtain pseudo-labels for the COCO2014 dataset, in the `pseudo_mask` directory, run:
 
 ```python
-python run_sample.py
-mv result/sem_seg ../data/coco2014/pseudo_mask/train2014
+# Run IRN for the COCO datset
+python run_sample_coco.py
+
+# Move pseudo-labels to the coco2014 data directory
+mv result/coco14/sem_seg ../data/coco2014/pseudo_mask/train2014
 ```
 
+After pseudo-labels are generated from IRN, 
+
 ### Segmentation
+
+Semantic Segmentation is run in the `segmentation` directory. From the root directory:
 
 ```console
 cd segmentation
 ```
 
-Train Deeplab v2 on Pascal VOC2012
+Train Deeplab v2
 ```console
 python main.py train --config-path configs/voc12.yaml
 
