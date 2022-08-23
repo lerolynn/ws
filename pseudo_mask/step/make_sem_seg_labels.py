@@ -8,6 +8,7 @@ import numpy as np
 import importlib
 import os
 import imageio
+from tqdm import tqdm
 
 import voc12.dataloader
 import coco14.dataloader
@@ -27,7 +28,7 @@ def _work(process_id, model, dataset, args):
 
         model.cuda()
 
-        for iter, pack in enumerate(data_loader):
+        for iter, pack in enumerate(tqdm(data_loader)):
             img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
             orig_img_size = [x.numpy()[0] for x in pack['size']]
 
@@ -63,8 +64,8 @@ def _work(process_id, model, dataset, args):
 
             imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), rw_pred.astype(np.uint8))
 
-            if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
-                print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
+            # if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
+            #     print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
 
 
 def run(args):
