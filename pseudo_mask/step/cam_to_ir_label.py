@@ -2,6 +2,7 @@
 import os
 import numpy as np
 import imageio
+from tqdm import tqdm
 
 from torch import multiprocessing
 from torch.utils.data import DataLoader
@@ -17,7 +18,7 @@ def _work(process_id, infer_dataset, args):
     databin = infer_dataset[process_id]
     infer_data_loader = DataLoader(databin, shuffle=False, num_workers=0, pin_memory=False)
 
-    for iter, pack in enumerate(infer_data_loader):
+    for iter, pack in enumerate(tqdm(infer_data_loader)):
 
         if args.coco:
             img_name = coco14.dataloader.decode_int_filename(pack['name'][0])
