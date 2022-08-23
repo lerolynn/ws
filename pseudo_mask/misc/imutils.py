@@ -1,5 +1,6 @@
 import random
 import numpy as np
+import torch
 
 import pydensecrf.densecrf as dcrf
 from pydensecrf.utils import unary_from_labels
@@ -171,7 +172,8 @@ def crf_inference_label(img, labels, t=10, n_labels=21, gt_prob=0.7):
 
 
 def get_strided_size(orig_size, stride):
-    return ((orig_size[0]-1)//stride+1, (orig_size[1]-1)//stride+1)
+    return (torch.div(orig_size[0]-1, stride+1, rounding_mode='floor'), 
+            torch.div(orig_size[1]-1, stride+1, rounding_mode='floor'))
 
 
 def get_strided_up_size(orig_size, stride):

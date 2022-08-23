@@ -7,6 +7,7 @@ from torch.backends import cudnn
 import numpy as np
 import importlib
 import os
+from tqdm import tqdm
 
 import voc12.dataloader
 import coco14.dataloader
@@ -25,7 +26,7 @@ def _work(process_id, model, dataset, args):
 
         model.cuda()
 
-        for iter, pack in enumerate(data_loader):
+        for iter, pack in enumerate(tqdm(data_loader)):
 
             img_name = pack['name'][0]
             label = pack['label'][0]
