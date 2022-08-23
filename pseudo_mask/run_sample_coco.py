@@ -52,7 +52,7 @@ if __name__ == '__main__':
     parser.add_argument("--sem_seg_bg_thres", default=0.25)
 
     # Output Path
-    parser.add_argument("--log_name", default="coco14_sample_train_eval", type=str)
+    parser.add_argument("--log_name", default="log/coco14_sample_train_eval", type=str)
     parser.add_argument("--cam_weights_name", default="sess/coco14/res50_coco_cam.pth", type=str)
     parser.add_argument("--irn_weights_name", default="sess/coco14/res50_coco_irn.pth", type=str)
     parser.add_argument("--cam_out_dir", default="result/coco14/cam", type=str)
@@ -75,7 +75,7 @@ if __name__ == '__main__':
 
     # Store coco variable to pass through args object
     args.coco = True
-
+    os.makedirs("log", exist_ok=True)
     os.makedirs("sess/coco14", exist_ok=True)
     os.makedirs(args.cam_out_dir, exist_ok=True)
     os.makedirs(args.ir_label_out_dir, exist_ok=True)

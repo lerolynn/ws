@@ -7,6 +7,7 @@ import voc12.dataloader
 import coco14.dataloader
 from misc import pyutils, torchutils, indexing
 import importlib
+from tqdm import tqdm
 
 def run(args):
 
@@ -61,7 +62,7 @@ def run(args):
 
         print('Epoch %d/%d' % (ep+1, args.irn_num_epoches))
 
-        for iter, pack in enumerate(train_data_loader):
+        for iter, pack in enumerate(tqdm(train_data_loader)):
 
             img = pack['img'].cuda(non_blocking=True)
             bg_pos_label = pack['aff_bg_pos_label'].cuda(non_blocking=True)
@@ -90,12 +91,12 @@ def run(args):
             if (optimizer.global_step - 1) % 50 == 0:
                 timer.update_progress(optimizer.global_step / max_step)
 
-                print('step:%5d/%5d' % (optimizer.global_step - 1, max_step),
-                      'loss:%.4f %.4f %.4f %.4f' % (
-                      avg_meter.pop('loss1'), avg_meter.pop('loss2'), avg_meter.pop('loss3'), avg_meter.pop('loss4')),
-                      'imps:%.1f' % ((iter + 1) * args.irn_batch_size / timer.get_stage_elapsed()),
-                      'lr: %.4f' % (optimizer.param_groups[0]['lr']),
-                      'etc:%s' % (timer.str_estimated_complete()), flush=True)
+                # print('step:%5d/%5d' % (optimizer.global_step - 1, max_step),
+                #       'loss:%.4f %.4f %.4f %.4f' % (
+                #       avg_meter.pop('loss1'), avg_meter.pop('loss2'), avg_meter.pop('loss3'), avg_meter.pop('loss4')),
+                #       'imps:%.1f' % ((iter + 1) * args.irn_batch_size / timer.get_stage_elapsed()),
+                #       'lr: %.4f' % (optimizer.param_groups[0]['lr']),
+                #       'etc:%s' % (timer.str_estimated_complete()), flush=True)
         else:
             timer.reset_stage()
 
