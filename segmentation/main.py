@@ -447,7 +447,7 @@ def crf(config_path, n_jobs):
         # CONFIG.EXP.ID,
         # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
-        "crf_logit",
+        "logit",
     )
     print("Logit src:", logit_dir)
     if not os.path.isdir(logit_dir):
