@@ -53,46 +53,74 @@ To obtain pseudo-labels for the VOC2012 dataset, in the `pseudo_mask` directory,
 
 ```python
 # Run IRN
-python run_sample.py --voc12_root ../data/VOC2012
-# Move pseudo-labels to the data directory
-mv result/sem_seg ../data/VOC2012/pseudo_mask
+python run_sample.py
+
+# Move pseudo-labels to the VOC2012 data directory
+mv result/voc12/sem_seg ../data/VOC2012/pseudo_mask
 ```
 
 #### COCO2014 dataset
 
-To obtain pseudo-labels for the COCO2014 dataset, in the `pseudo_mask_coco` directory, run:
+To obtain pseudo-labels for the COCO2014 dataset, in the `pseudo_mask` directory, run:
 
 ```python
-python run_sample.py
-mv result/sem_seg ../data/coco2014/pseudo_mask/train2014
+# Run IRN for the COCO datset
+python run_sample_coco.py
+
+# Move pseudo-labels to the coco2014 data directory
+mv result/coco14/sem_seg ../data/coco2014/pseudo_mask/train2014
 ```
 
+After pseudo-labels are generated from IRN, 
+
 ### Segmentation
+
+Semantic Segmentation is run in the `segmentation` directory. From the root directory:
 
 ```console
 cd segmentation
 ```
 
-Train Deeplab v2 on Pascal VOC2012
+#### VOC2012 dataset
+
+Train DeeplabV2 on psuedo-labels generated from IRN:
 ```console
 python main.py train --config-path configs/voc12.yaml
+```
 
-python main.py train --config-path configs/coco.yaml
+Evaluate performance on validation set:
+```console
+python main.py test --config-path configs/voc12.yaml --model-path output/voc12/models/train/checkpoint_final.pth
+```
+
+Evaluate with CRF post-processing:
+```console
+python main.py crf --config-path configs/voc12.yaml
+```
+
+#### COCO2014 dataset
+
+Train DeeplabV2:
+```console
+python main.py train --config-path configs/coco14.yaml
 ```
 
 Evaluate performance on validation set
-
 ```console
-python main.py test --config-path configs/voc12.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train/checkpoint_final.pth
+python main.py test --config-path configs/voc12.yaml --model-path output/voc12/models/train/checkpoint_final.pth
+```
 
-python main.py test --config-path configs/coco.yaml --model-path output/coco/models/coco/deeplabv2_resnet101_msc/train2014/checkpoint_final.pth
+Evaluate with CRF post-processing:
+```console
+python main.py test --config-path configs/coco14.yaml --model-path output/coco14/models/train2014/checkpoint_final.pth
 ```
 
 Evaluate with CRF post-processing
 ```console
-python main.py crf --config-path configs/coco.yaml
+python main.py crf --config-path configs/coco14.yaml
 ```
 
 ## Acknowledgment
 
-Much of this code was borrowed from [IRN](https://github.com/jiwoon-ahn/irn) and [deeplab-pytorch](https://github.com/kazuto1011/deeplab-pytorch)
+Significant portions of the code from this repository was borrowed from [IRN](https://github.com/jiwoon-ahn/irn) and [deeplab-pytorch](https://github.com/kazuto1011/deeplab-pytorch). Thank you [Jiwoon Ahn](https://github.com/jiwoon-ahn/irn) and [
+Kazuto Nakashima](https://github.com/kazuto1011).

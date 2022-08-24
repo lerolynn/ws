@@ -6,8 +6,11 @@ from torch.utils.data import DataLoader
 import torch.nn.functional as F
 
 import importlib
+from tqdm import tqdm
 
 import voc12.dataloader
+import coco14.dataloader
+
 from misc import pyutils, torchutils
 
 
@@ -37,21 +40,32 @@ def validate(model, data_loader):
 
 
 def run(args):
-
-    model = getattr(importlib.import_module(args.cam_network), 'Net')()
-
-
-    train_dataset = voc12.dataloader.VOC12ClassificationDataset(args.train_list, voc12_root=args.voc12_root,
+    if args.coco:
+        model = getattr(importlib.import_module(args.cam_network), 'Net')(n_classes=80)
+        train_dataset = coco14.dataloader.COCO14ClassificationDataset(args.train_list, coco14_root=args.coco14_root,
                                                                 resize_long=(320, 640), hor_flip=True,
                                                                 crop_size=512, crop_method="random")
-    train_data_loader = DataLoader(train_dataset, batch_size=args.cam_batch_size,
-                                   shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
-    max_step = (len(train_dataset) // args.cam_batch_size) * args.cam_num_epoches
 
-    val_dataset = voc12.dataloader.VOC12ClassificationDataset(args.val_list, voc12_root=args.voc12_root,
-                                                              crop_size=512)
+    else:
+        model = getattr(importlib.import_module(args.cam_network), 'Net')()
+        train_dataset = voc12.dataloader.VOC12ClassificationDataset(args.train_list, voc12_root=args.voc12_root,
+                                                                    resize_long=(320, 640), hor_flip=True,
+                                                                    crop_size=512, crop_method="random")
+    
+    train_data_loader = DataLoader(train_dataset, batch_size=args.cam_batch_size,
+                                    shuffle=True, num_workers=args.num_workers, pin_memory=True, drop_last=True)
+    max_step = (len(train_dataset) // args.cam_batch_size) * args.cam_num_epoches
+    
+    if args.coco: 
+        val_dataset = coco14.dataloader.COCO14ClassificationDataset(args.val_list, coco14_root=args.coco14_root,
+                                                              crop_size=512, train=False)
+
+    else:
+        val_dataset = voc12.dataloader.VOC12ClassificationDataset(args.val_list, voc12_root=args.voc12_root,
+                                                                crop_size=512)
+    
     val_data_loader = DataLoader(val_dataset, batch_size=args.cam_batch_size,
-                                 shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
+                                    shuffle=False, num_workers=args.num_workers, pin_memory=True, drop_last=True)
 
     param_groups = model.trainable_parameters()
     optimizer = torchutils.PolyOptimizer([
@@ -70,7 +84,7 @@ def run(args):
 
         print('Epoch %d/%d' % (ep+1, args.cam_num_epoches))
 
-        for step, pack in enumerate(train_data_loader):
+        for step, pack in enumerate(tqdm(train_data_loader)):
 
             img = pack['img']
             label = pack['label'].cuda(non_blocking=True)
@@ -87,15 +101,15 @@ def run(args):
             if (optimizer.global_step-1)%100 == 0:
                 timer.update_progress(optimizer.global_step / max_step)
 
-                print('step:%5d/%5d' % (optimizer.global_step - 1, max_step),
-                      'loss:%.4f' % (avg_meter.pop('loss1')),
-                      'imps:%.1f' % ((step + 1) * args.cam_batch_size / timer.get_stage_elapsed()),
-                      'lr: %.4f' % (optimizer.param_groups[0]['lr']),
-                      'etc:%s' % (timer.str_estimated_complete()), flush=True)
+                # print('step:%5d/%5d' % (optimizer.global_step - 1, max_step),
+                #       'loss:%.4f' % (avg_meter.pop('loss1')),
+                #       'imps:%.1f' % ((step + 1) * args.cam_batch_size / timer.get_stage_elapsed()),
+                #       'lr: %.4f' % (optimizer.param_groups[0]['lr']),
+                #       'etc:%s' % (timer.str_estimated_complete()), flush=True)
 
         else:
             validate(model, val_data_loader)
             timer.reset_stage()
 
-    torch.save(model.module.state_dict(), args.cam_weights_name + '.pth')
+    torch.save(model.module.state_dict(), args.cam_weights_name)
     torch.cuda.empty_cache()

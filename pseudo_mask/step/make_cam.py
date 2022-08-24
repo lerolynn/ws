@@ -7,8 +7,11 @@ from torch.backends import cudnn
 import numpy as np
 import importlib
 import os
+from tqdm import tqdm
 
 import voc12.dataloader
+import coco14.dataloader
+
 from misc import torchutils, imutils
 
 cudnn.enabled = True
@@ -23,7 +26,7 @@ def _work(process_id, model, dataset, args):
 
         model.cuda()
 
-        for iter, pack in enumerate(data_loader):
+        for iter, pack in enumerate(tqdm(data_loader)):
 
             img_name = pack['name'][0]
             label = pack['label'][0]
@@ -55,19 +58,28 @@ def _work(process_id, model, dataset, args):
             np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
                     {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
 
-            if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
-                print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
+            # if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
+            #     print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
 
 
 def run(args):
-    model = getattr(importlib.import_module(args.cam_network), 'CAM')()
-    model.load_state_dict(torch.load(args.cam_weights_name + '.pth'), strict=True)
+    if args.coco:
+        model = getattr(importlib.import_module(args.cam_network), 'CAM')(n_classes=80)
+    else:
+        model = getattr(importlib.import_module(args.cam_network), 'CAM')()
+    model.load_state_dict(torch.load(args.cam_weights_name), strict=True)
     model.eval()
 
     n_gpus = torch.cuda.device_count()
 
-    dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
+    if args.coco:
+        dataset = coco14.dataloader.COCO14ClassificationDatasetMSF(args.train_list,
+                                                             coco14_root=args.coco14_root, scales=args.cam_scales)
+        
+    else:
+        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
                                                              voc12_root=args.voc12_root, scales=args.cam_scales)
+    
     dataset = torchutils.split_dataset(dataset, n_gpus)
 
     print('[ ', end='')

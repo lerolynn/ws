@@ -77,7 +77,7 @@ def resize_labels(labels, size):
     new_labels = []
     for label in labels:
         label = label.float().numpy()
-        label = Image.fromarray(label).resize(size, resample=Image.NEAREST)
+        label = Image.fromarray(label).resize(size, resample=Image.Resampling.NEAREST)
         new_labels.append(np.asarray(label))
     new_labels = torch.LongTensor(new_labels)
     return new_labels
@@ -114,7 +114,7 @@ def train(config_path, cuda):
     torch.backends.cudnn.benchmark = True
 
     # Dataset
-    dataset = get_dataset(CONFIG.DATASET.NAME_PSEUDO)(
+    dataset = get_dataset(CONFIG.DATASET.TRAIN_NAME)(
         root=CONFIG.DATASET.ROOT,
         split=CONFIG.DATASET.SPLIT.TRAIN,
         ignore_label=CONFIG.DATASET.IGNORE_LABEL,
@@ -196,8 +196,8 @@ def train(config_path, cuda):
     checkpoint_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "models",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.TRAIN,
     )
     makedirs(checkpoint_dir)
@@ -341,8 +341,8 @@ def test(config_path, model_path, cuda):
     logit_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "features",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
         "logit",
     )
@@ -353,8 +353,8 @@ def test(config_path, model_path, cuda):
     save_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "scores",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
     )
     makedirs(save_dir)
@@ -444,8 +444,8 @@ def crf(config_path, n_jobs):
     logit_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "features",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
         "logit",
     )
@@ -458,8 +458,8 @@ def crf(config_path, n_jobs):
     save_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "scores",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
     )
     makedirs(save_dir)

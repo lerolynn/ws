@@ -8,8 +8,11 @@ import numpy as np
 import importlib
 import os
 import imageio
+from tqdm import tqdm
 
 import voc12.dataloader
+import coco14.dataloader
+
 from misc import torchutils, indexing
 
 cudnn.enabled = True
@@ -25,9 +28,14 @@ def _work(process_id, model, dataset, args):
 
         model.cuda()
 
-        for iter, pack in enumerate(data_loader):
-            img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
-            orig_img_size = np.asarray(pack['size'])
+        for iter, pack in enumerate(tqdm(data_loader)):
+
+            if args.coco:
+                img_name = coco14.dataloader.decode_int_filename(pack['name'][0])
+            else:
+                img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
+                
+            orig_img_size = [x.numpy()[0] for x in pack['size']]
 
             edge, dp = model(pack['img'][0].cuda(non_blocking=True))
 
@@ -35,6 +43,17 @@ def _work(process_id, model, dataset, args):
 
             cams = cam_dict['cam']
             keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
+            
+            # Directly save masks with just background class
+            if keys.shape[0] == 1:
+                conf = np.zeros_like(pack['img'][0])[0, 0]
+                imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), conf.astype(np.uint8))
+                continue
+
+            # Skip cams that take more gpu memory than available
+            # if cams.shape[1] * cams.shape[2] > 21920:
+            #     print(img_name, cams.shape, cams.shape[1]*cams.shape[2])
+            #     continue
 
             cam_downsized_values = cams.cuda()
 
@@ -50,8 +69,8 @@ def _work(process_id, model, dataset, args):
 
             imageio.imsave(os.path.join(args.sem_seg_out_dir, img_name + '.png'), rw_pred.astype(np.uint8))
 
-            if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
-                print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
+            # if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
+            #     print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
 
 
 def run(args):
@@ -61,7 +80,12 @@ def run(args):
 
     n_gpus = torch.cuda.device_count()
 
-    dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.infer_list,
+    if args.coco:
+        dataset = coco14.dataloader.COCO14ClassificationDatasetMSF(args.infer_list,
+                                                             coco14_root=args.coco14_root,
+                                                             scales=(1.0,))
+    else:                                                         
+        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.infer_list,
                                                              voc12_root=args.voc12_root,
                                                              scales=(1.0,))
     dataset = torchutils.split_dataset(dataset, n_gpus)

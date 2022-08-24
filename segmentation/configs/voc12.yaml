@@ -1,10 +1,15 @@
 EXP:
     ID: voc12
-    OUTPUT_DIR: output/voc
+    
+    # Directory for output trained using pseudolabels
+    OUTPUT_DIR: output/voc12
+
+    # Directory for output trained using ground truth labels
+    # OUTPUT_DIR: output/gt/voc12 
 
 DATASET:
     NAME: voc
-    NAME_PSEUDO: pseudovoc
+    TRAIN_NAME: pseudovoc
     ROOT: ../data
     LABELS: ./data/datasets/voc12/labels.txt
     N_CLASSES: 21
