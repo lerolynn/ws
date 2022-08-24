@@ -77,7 +77,7 @@ def resize_labels(labels, size):
     new_labels = []
     for label in labels:
         label = label.float().numpy()
-        label = Image.fromarray(label).resize(size, resample=Image.NEAREST)
+        label = Image.fromarray(label).resize(size, resample=Image.Resampling.NEAREST)
         new_labels.append(np.asarray(label))
     new_labels = torch.LongTensor(new_labels)
     return new_labels
