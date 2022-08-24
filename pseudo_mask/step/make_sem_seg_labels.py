@@ -29,7 +29,12 @@ def _work(process_id, model, dataset, args):
         model.cuda()
 
         for iter, pack in enumerate(tqdm(data_loader)):
-            img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
+
+            if args.coco:
+                img_name = coco14.dataloader.decode_int_filename(pack['name'][0])
+            else:
+                img_name = voc12.dataloader.decode_int_filename(pack['name'][0])
+                
             orig_img_size = [x.numpy()[0] for x in pack['size']]
 
             edge, dp = model(pack['img'][0].cuda(non_blocking=True))
