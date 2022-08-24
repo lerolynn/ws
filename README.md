@@ -47,8 +47,6 @@ DeepLab-v2 is used to perform Semantic Segmentation, with ground-truth labels us
 
 ### IRN
 
-
-
 #### VOC2012 dataset
 
 To obtain pseudo-labels for the VOC2012 dataset, in the `pseudo_mask` directory, run:
@@ -83,28 +81,46 @@ Semantic Segmentation is run in the `segmentation` directory. From the root dire
 cd segmentation
 ```
 
-Train Deeplab v2
+#### VOC2012 dataset
+
+Train DeeplabV2 on psuedo-labels generated from IRN:
 ```console
 python main.py train --config-path configs/voc12.yaml
+```
 
+Evaluate performance on validation set:
+```console
+python main.py test --config-path configs/voc12.yaml --model-path output/voc12/models/train/checkpoint_final.pth
+```
+
+Evaluate with CRF post-processing:
+```console
+python main.py crf --config-path configs/voc12.yaml
+```
+
+#### COCO2014 dataset
+
+Train DeeplabV2:
+```console
 python main.py train --config-path configs/coco14.yaml
 ```
 
 Evaluate performance on validation set
-
 ```console
 python main.py test --config-path configs/voc12.yaml --model-path output/voc12/models/train/checkpoint_final.pth
+```
 
+Evaluate with CRF post-processing:
+```console
 python main.py test --config-path configs/coco14.yaml --model-path output/coco14/models/train2014/checkpoint_final.pth
 ```
 
 Evaluate with CRF post-processing
 ```console
-python main.py crf --config-path configs/voc12.yaml
-
 python main.py crf --config-path configs/coco14.yaml
 ```
 
 ## Acknowledgment
 
-Much of this code was borrowed from [IRN](https://github.com/jiwoon-ahn/irn) and [deeplab-pytorch](https://github.com/kazuto1011/deeplab-pytorch)
+Significant portions of the code from this repository was borrowed from [IRN](https://github.com/jiwoon-ahn/irn) and [deeplab-pytorch](https://github.com/kazuto1011/deeplab-pytorch). Thank you [Jiwoon Ahn](https://github.com/jiwoon-ahn/irn) and [
+Kazuto Nakashima](https://github.com/kazuto1011).
