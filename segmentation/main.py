@@ -341,8 +341,8 @@ def test(config_path, model_path, cuda):
     logit_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "features",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
         "logit",
     )
@@ -353,8 +353,8 @@ def test(config_path, model_path, cuda):
     save_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "scores",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
     )
     makedirs(save_dir)

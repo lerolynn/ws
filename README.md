@@ -87,7 +87,7 @@ Train Deeplab v2
 ```console
 python main.py train --config-path configs/voc12.yaml
 
-python main.py train --config-path configs/coco.yaml
+python main.py train --config-path configs/coco14.yaml
 ```
 
 Evaluate performance on validation set
@@ -96,7 +96,7 @@ Evaluate performance on validation set
 
 python main.py test --config-path configs/voc12.yaml --model-path output/voc12/models/train/checkpoint_final.pth
 
-python main.py test --config-path configs/coco.yaml --model-path output/coco/models/coco/deeplabv2_resnet101_msc/train2014/checkpoint_final.pth
+python main.py test --config-path configs/coco14.yaml --model-path output/coco14/models/train2014/checkpoint_final.pth
 ```
 
 Evaluate with CRF post-processing
