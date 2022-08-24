@@ -10,13 +10,13 @@ def run(args):
     preds = []
     n_labels = 0
     if args.coco:
-        ids = open('coco14/train2014_semseg.txt').readlines()
+        ids = open('coco14/train2014.txt').readlines()
         ids = [i.split('\n')[0] for i in ids]
         labels = []
         
 
         for i, id in enumerate(ids):
-            label = np.array(Image.open('../data/coco2014/mask/train2014/%s.png' % id))
+            label = np.array(Image.open('../data/coco2014/gt_mask/train2014/%s.png' % id))
             cls_labels = imageio.imread(os.path.join(args.sem_seg_out_dir, id + '.png')).astype(np.uint8)
             cls_labels[cls_labels == 255] = 0
             preds.append(cls_labels.copy())
