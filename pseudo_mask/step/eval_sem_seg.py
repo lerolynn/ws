@@ -27,6 +27,7 @@ def run(args):
     else:
         dataset = VOCSemanticSegmentationDataset(split=args.chainer_eval_set, data_dir=args.voc12_root)
         labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
+
         for id in tqdm(dataset.ids):
             cls_labels = imageio.imread(os.path.join(args.sem_seg_out_dir, id + '.png')).astype(np.uint8)
             cls_labels[cls_labels == 255] = 0
