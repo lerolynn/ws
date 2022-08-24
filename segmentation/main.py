@@ -196,8 +196,8 @@ def train(config_path, cuda):
     checkpoint_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "models",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.TRAIN,
     )
     makedirs(checkpoint_dir)

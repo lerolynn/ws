@@ -1,6 +1,11 @@
 EXP:
-    ID: coco
-    OUTPUT_DIR: output/coco
+    ID: coco14
+
+    # Directory for output trained using pseudolabels
+    OUTPUT_DIR: output/coco14
+
+    # Directory for output trained using ground truth labels
+    # OUTPUT_DIR: output/gt/coco14
 
 DATASET:
     NAME: coco

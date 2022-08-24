@@ -93,7 +93,8 @@ python main.py train --config-path configs/coco.yaml
 Evaluate performance on validation set
 
 ```console
-python main.py test --config-path configs/voc12.yaml --model-path data/models/voc12/deeplabv2_resnet101_msc/train/checkpoint_final.pth
+
+python main.py test --config-path configs/voc12.yaml --model-path output/voc12/models/train/checkpoint_final.pth
 
 python main.py test --config-path configs/coco.yaml --model-path output/coco/models/coco/deeplabv2_resnet101_msc/train2014/checkpoint_final.pth
 ```

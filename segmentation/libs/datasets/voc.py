@@ -20,7 +20,8 @@ from .base import _BaseDataset
 
 class VOC(_BaseDataset):
     """
-    PASCAL VOC Segmentation dataset
+    PASCAL VOC Segmentation dataset with original 1464 train images
+    Dataloader used to load ground-truth segmentation labels for test stage
     """
 
     def __init__(self, year=2012, **kwargs):
@@ -30,7 +31,7 @@ class VOC(_BaseDataset):
     def _set_files(self):
         self.root = osp.join(self.root, "VOC{}".format(self.year))
         self.image_dir = osp.join(self.root, "JPEGImages")
-        self.label_dir = osp.join(self.root, "SegmentationClass_gt")
+        self.label_dir = osp.join(self.root, "SegmentationClass")
 
         if self.split in ["train", "trainval", "val", "test"]:
             file_list = osp.join(
@@ -54,7 +55,8 @@ class VOC(_BaseDataset):
 
 class pseudoVOC(_BaseDataset):
     """
-    PASCAL VOC Segmentation dataset for pseudolabels
+    PASCAL VOC Segmentation dataset for pseudolabels with original 1464 train images
+    Dataloader used to load pseudo-labels for training stage
     """
 
     def __init__(self, year=2012, **kwargs):
