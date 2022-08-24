@@ -444,8 +444,8 @@ def crf(config_path, n_jobs):
     logit_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "features",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
         "logit",
     )
@@ -458,8 +458,8 @@ def crf(config_path, n_jobs):
     save_dir = os.path.join(
         CONFIG.EXP.OUTPUT_DIR,
         "scores",
-        CONFIG.EXP.ID,
-        CONFIG.MODEL.NAME.lower(),
+        # CONFIG.EXP.ID,
+        # CONFIG.MODEL.NAME.lower(),
         CONFIG.DATASET.SPLIT.VAL,
     )
     makedirs(save_dir)

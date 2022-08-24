@@ -93,7 +93,6 @@ python main.py train --config-path configs/coco14.yaml
 Evaluate performance on validation set
 
 ```console
-
 python main.py test --config-path configs/voc12.yaml --model-path output/voc12/models/train/checkpoint_final.pth
 
 python main.py test --config-path configs/coco14.yaml --model-path output/coco14/models/train2014/checkpoint_final.pth
@@ -101,7 +100,9 @@ python main.py test --config-path configs/coco14.yaml --model-path output/coco14
 
 Evaluate with CRF post-processing
 ```console
-python main.py crf --config-path configs/coco.yaml
+python main.py crf --config-path configs/voc12.yaml
+
+python main.py crf --config-path configs/coco14.yaml
 ```
 
 ## Acknowledgment
