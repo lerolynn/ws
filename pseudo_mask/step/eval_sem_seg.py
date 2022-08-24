@@ -33,7 +33,7 @@ def run(args):
             preds.append(cls_labels.copy())
             n_labels += 1
 
-    confusion = calc_semantic_segmentation_confusion(preds, labels)[:21, :21]
+    confusion = calc_semantic_segmentation_confusion(preds, labels)
 
     gtj = confusion.sum(axis=1)
     resj = confusion.sum(axis=0)
