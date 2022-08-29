@@ -8,6 +8,9 @@ import numpy as np
 import importlib
 import os
 from tqdm import tqdm
+import matplotlib.pyplot as plt
+import imageio
+import cv2
 
 import voc12.dataloader
 import coco14.dataloader
@@ -54,6 +57,16 @@ def _work(process_id, model, dataset, args):
             highres_cam = highres_cam[valid_cat]
             highres_cam /= F.adaptive_max_pool2d(highres_cam, (1, 1)) + 1e-5
 
+            # Save CAM as image
+            # raw_img = np.asarray(cv2.imread(os.path.join("../data/VOC2012/JPEGImages",img_name+".jpg")))
+            # cam_map, _ = torch.max(highres_cam, dim=0)
+            # cam_map = plt.cm.jet_r(cam_map.cpu().numpy())[..., :3] * 255.0
+            # cam_output = (cam_map.astype(np.float) * (1/3) + raw_img.astype(np.float) * (2/3))
+
+            # # Save cam images
+            # outfile = os.path.join("result/voc12/cam_img", img_name + ".png")
+            # cv2.imwrite(outfile, cam_output)
+
             # save cams
             np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
                     {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
@@ -79,7 +92,7 @@ def run(args):
     else:
         dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
                                                              voc12_root=args.voc12_root, scales=args.cam_scales)
-    
+
     dataset = torchutils.split_dataset(dataset, n_gpus)
 
     print('[ ', end='')
