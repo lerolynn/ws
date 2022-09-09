@@ -84,6 +84,10 @@ if __name__ == '__main__':
     os.makedirs(args.sem_seg_out_dir, exist_ok=True)
     # os.makedirs(args.ins_seg_out_dir, exist_ok=True)
 
+    os.makedirs("result/voc12/cam_img", exist_ok=True) # CAM image
+    os.makedirs("result/voc12/erased_jpg", exist_ok=True) # erased raw image
+    os.makedirs("result/voc12/cam_comp", exist_ok=True) # CAM from complementary activations
+
     pyutils.Logger(args.log_name + '.log')
     print(vars(args))
     print("\nRunning IRN to make pseudo labels for VOC2012 datset\n")
