@@ -55,7 +55,7 @@ if __name__ == '__main__':
 
     # Output Path
     parser.add_argument("--log_name", default="log/voc12_sample_train_eval", type=str)
-    parser.add_argument("--cam_weights_name", default="sess/voc12/res50_cam.pth", type=str)
+    parser.add_argument("--cam_weights_name", default="sess/voc12/res50_adv.pth", type=str)
     parser.add_argument("--irn_weights_name", default="sess/voc12/res50_irn.pth", type=str)
     parser.add_argument("--cam_out_dir", default="result/voc12/cam", type=str)
     parser.add_argument("--ir_label_out_dir", default="result/voc12/ir_label", type=str)
@@ -89,16 +89,16 @@ if __name__ == '__main__':
     print("\nRunning IRN to make pseudo labels for VOC2012 datset\n")
 
     if args.train_cam_pass is True:
-        import step.train_cam
+        import step.train_adv
 
         timer = pyutils.Timer('step.train_cam:')
-        step.train_cam.run(args)
+        step.train_adv.run(args)
 
     if args.make_cam_pass is True:
-        import step.make_cam
+        import step.make_adv
 
         timer = pyutils.Timer('step.make_cam:')
-        step.make_cam.run(args)
+        step.make_adv.run(args)
 
     if args.eval_cam_pass is True:
         import step.eval_cam
