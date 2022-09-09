@@ -176,7 +176,7 @@ class VOC12ClassificationDataset(VOC12ImageDataset):
 def get_adv_path(img_name, voc12_root):
     if not isinstance(img_name, str):
         img_name = decode_int_filename(img_name)
-    return os.path.join("results/erased_jpg", img_name + '.png')
+    return os.path.join("results/voc12/erased_jpg", img_name + '.png')
 
 
 class VOC12AdvImageDataset(Dataset):
