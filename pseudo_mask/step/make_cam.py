@@ -103,7 +103,7 @@ def run(args):
                                                              coco14_root=args.coco14_root, scales=args.cam_scales)
         
     else:
-        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
+        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.val_list,
                                                              voc12_root=args.voc12_root, scales=args.cam_scales)
 
     dataset = torchutils.split_dataset(dataset, n_gpus)

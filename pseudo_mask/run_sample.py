@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser.add_argument("--voc12_root", default="../data/VOC2012", type=str)
 
     # Dataset
-    parser.add_argument("--train_list", default="voc12/train.txt", type=str)
+    parser.add_argument("--train_list", default="voc12/train2.txt", type=str)
     parser.add_argument("--val_list", default="voc12/val.txt", type=str)
     parser.add_argument("--infer_list", default="voc12/train.txt", type=str,
                         help="voc12/train_aug.txt to train a fully supervised model, "

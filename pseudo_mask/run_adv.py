@@ -91,13 +91,13 @@ if __name__ == '__main__':
     if args.train_cam_pass is True:
         import step.train_adv
 
-        timer = pyutils.Timer('step.train_cam:')
+        timer = pyutils.Timer('step.train_adv:')
         step.train_adv.run(args)
 
     if args.make_cam_pass is True:
         import step.make_adv
 
-        timer = pyutils.Timer('step.make_cam:')
+        timer = pyutils.Timer('step.make_adv:')
         step.make_adv.run(args)
 
     if args.eval_cam_pass is True:
