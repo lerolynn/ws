@@ -203,7 +203,7 @@ class VOC12AdvImageDataset(Dataset):
         name = self.img_name_list[idx]
         name_str = decode_int_filename(name)
 
-        img = np.asarray(imageio.imread(get_img_path(name_str, self.voc12_root)))
+        img = np.asarray(imageio.imread(get_adv_path(name_str, self.voc12_root)))
 
         if self.resize_long:
             img = imutils.random_resize_long(img, self.resize_long[0], self.resize_long[1])
