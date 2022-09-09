@@ -69,7 +69,7 @@ def _work(process_id, model, dataset, args):
             # raw_img[idx] = 0
             # cam_output = raw_img.astype(np.float)
             # Save cam images
-            outfile = os.path.join("result/voc12/cam_img_comp", img_name + ".png")
+            outfile = os.path.join("result/voc12/cam_comp", img_name + ".png")
             cv2.imwrite(outfile, cam_output)
 
             # save cams
