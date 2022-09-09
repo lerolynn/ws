@@ -61,7 +61,7 @@ def run(args):
                                                               crop_size=512, train=False)
 
     else:
-        val_dataset = voc12.dataloader.VOC12AdvClassificationDataset(args.val_list, voc12_root=args.voc12_root,
+        val_dataset = voc12.dataloader.VOC12ClassificationDataset(args.val_list, voc12_root=args.voc12_root,
                                                                 crop_size=512)
     
     val_data_loader = DataLoader(val_dataset, batch_size=args.cam_batch_size,
