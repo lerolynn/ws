@@ -65,8 +65,11 @@ if __name__ == '__main__':
 
     # Step
     parser.add_argument("--train_cam_pass", default=False)
+    # Train adversarial erasing step
+    parser.add_argument("--train_adv_pass", default=True)
+
     parser.add_argument("--make_cam_pass", default=True)
-    parser.add_argument("--eval_cam_pass", default=False)
+    parser.add_argument("--eval_cam_pass", default=True)
     parser.add_argument("--cam_to_ir_label_pass", default=False)
     parser.add_argument("--train_irn_pass", default=False)
     # parser.add_argument("--make_ins_seg_pass", default=True)
@@ -86,7 +89,7 @@ if __name__ == '__main__':
     os.makedirs(args.sem_seg_out_dir, exist_ok=True)
     # os.makedirs(args.ins_seg_out_dir, exist_ok=True)
 
-    os.makedirs("result/voc12/cam_img", exist_ok=True) # CAM image
+    os.makedirs("result/voc12/combined_cam", exist_ok=True) # CAM image
     os.makedirs("result/voc12/erased_jpg", exist_ok=True) # erased raw image
     os.makedirs("result/voc12/cam_comp", exist_ok=True) # CAM from complementary activations
 
@@ -99,6 +102,17 @@ if __name__ == '__main__':
 
         timer = pyutils.Timer('step.train_cam:')
         step.train_cam.run(args)
+
+    # Recursive adversarial erasing
+    if args.train_adv_pass is True:
+        import step.train_adv
+        import step.make_adv
+
+        timer = pyutils.Timer('step.train_adv:')
+        thresh = 0.9
+        for i in range(1):
+            step.train_adv.run(args)
+            step.make_adv.run(args)
 
     if args.make_cam_pass is True:
         import step.make_cam
