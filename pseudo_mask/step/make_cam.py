@@ -89,14 +89,11 @@ def _work(process_id, model, dataset, args):
 
 
 def run(args):
-    if args.train_adv_pass:
-        cam_network = args.cam_network
-    else:
 
     if args.coco:
-        model = getattr(importlib.import_module(cam_network), 'CAM')(n_classes=80)
+        model = getattr(importlib.import_module(args.cam_network), 'CAM')(n_classes=80)
     else:
-        model = getattr(importlib.import_module(cam_network), 'CAM')()
+        model = getattr(importlib.import_module(args.cam_network), 'CAM')()
     model.load_state_dict(torch.load(args.cam_weights_name), strict=True)
     model.eval()
 
