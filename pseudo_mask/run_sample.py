@@ -64,9 +64,9 @@ if __name__ == '__main__':
     # parser.add_argument("--ins_seg_out_dir", default="result/voc12/ins_seg", type=str)
 
     # Step
-    parser.add_argument("--train_cam_pass", default=False)
+    parser.add_argument("--train_cam_pass", default=True)
     # Train adversarial erasing step
-    parser.add_argument("--train_adv_pass", default=True)
+    parser.add_argument("--train_adv_pass", default=False)
 
     parser.add_argument("--make_cam_pass", default=True)
     parser.add_argument("--eval_cam_pass", default=True)
@@ -108,11 +108,13 @@ if __name__ == '__main__':
         import step.train_adv
         import step.make_adv
 
-        timer = pyutils.Timer('step.train_adv:')
-        thresh = 0.9
+        thresh = [0.9, 0.8, 0.7]
 
-        step.make_adv.run(args)
-        step.train_adv.run(args)
+        for i in range(len(thresh)):
+            timer = pyutils.Timer('step.make_adv:')
+            step.make_adv.run(args, thresh[i])
+            timer = pyutils.Timer('step.train_adv:')
+            step.train_adv.run(args)
 
     if args.make_cam_pass is True:
         import step.make_cam

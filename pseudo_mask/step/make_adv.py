@@ -19,7 +19,7 @@ from misc import torchutils, imutils
 
 cudnn.enabled = True
 
-def _work(process_id, model, dataset, args):
+def _work(process_id, model, dataset, args, thres):
 
     databin = dataset[process_id]
     n_gpus = torch.cuda.device_count()
@@ -63,7 +63,7 @@ def _work(process_id, model, dataset, args):
             cam_map = cam_map.cpu().numpy()
 
             erase_mask = np.zeros((cam_map.shape))
-            erase_mask[cam_map > 0.9] = 1
+            erase_mask[cam_map > thres] = 1
             idx = (erase_mask==1)
 
             cam_map = plt.cm.jet_r(cam_map)[..., :3] * 255.0
@@ -88,7 +88,7 @@ def _work(process_id, model, dataset, args):
             #     print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
 
 
-def run(args):
+def run(args, thres):
     if args.coco:
         model = getattr(importlib.import_module(args.cam_network), 'CAM')(n_classes=80)
     else:
@@ -109,7 +109,7 @@ def run(args):
     dataset = torchutils.split_dataset(dataset, n_gpus)
 
     print('[ ', end='')
-    multiprocessing.spawn(_work, nprocs=n_gpus, args=(model, dataset, args), join=True)
+    multiprocessing.spawn(_work, nprocs=n_gpus, args=(model, dataset, args, thres), join=True)
     print(']')
 
     torch.cuda.empty_cache()
