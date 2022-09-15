@@ -110,9 +110,9 @@ if __name__ == '__main__':
 
         timer = pyutils.Timer('step.train_adv:')
         thresh = 0.9
-        for i in range(1):
-            step.train_adv.run(args)
-            step.make_adv.run(args)
+
+        step.make_adv.run(args)
+        step.train_adv.run(args)
 
     if args.make_cam_pass is True:
         import step.make_cam
