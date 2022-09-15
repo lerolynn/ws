@@ -109,15 +109,13 @@ if __name__ == '__main__':
         import step.make_adv
         import step.eval_cam
 
-        thresh = [0.9, 0.8, 0.7]
+        thresh = [0.8]
 
         for i in range(len(thresh)):
             timer = pyutils.Timer('step.make_adv:')
             step.make_adv.run(args, thresh[i])
             timer = pyutils.Timer('step.train_adv:')
             step.train_adv.run(args)
-            timer = pyutils.Timer('step.eval_cam:')
-            step.eval_cam.run(args)
 
     if args.make_cam_pass is True:
         import step.make_cam
