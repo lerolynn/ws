@@ -66,7 +66,7 @@ if __name__ == '__main__':
     # Step
     parser.add_argument("--train_cam_pass", default=True)
     # Train adversarial erasing step
-    parser.add_argument("--train_adv_pass", default=False)
+    parser.add_argument("--train_adv_pass", default=True)
 
     parser.add_argument("--make_cam_pass", default=True)
     parser.add_argument("--eval_cam_pass", default=True)
@@ -107,6 +107,7 @@ if __name__ == '__main__':
     if args.train_adv_pass is True:
         import step.train_adv
         import step.make_adv
+        import step.eval_cam
 
         thresh = [0.9, 0.8, 0.7]
 
@@ -115,6 +116,8 @@ if __name__ == '__main__':
             step.make_adv.run(args, thresh[i])
             timer = pyutils.Timer('step.train_adv:')
             step.train_adv.run(args)
+            timer = pyutils.Timer('step.eval_cam:')
+            step.eval_cam.run(args)
 
     if args.make_cam_pass is True:
         import step.make_cam
