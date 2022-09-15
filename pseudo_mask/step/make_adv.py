@@ -30,10 +30,14 @@ def _work(process_id, model, dataset, args):
         model.cuda()
 
         for iter, pack in enumerate(tqdm(data_loader)):
-
             img_name = pack['name'][0]
             label = pack['label'][0]
             size = pack['size']
+
+            cam_dict = np.load(os.path.join(args.prev_cam_out_dir, img_name + '.npy'), allow_pickle=True).item()
+            orig_strided_cam = cam_dict['cam'].cuda()
+            orig_highres_cam = torch.from_numpy(cam_dict['high_res']).cuda()
+            print(type(orig_highres_cam))
 
             strided_size = imutils.get_strided_size(size, 4)
             strided_up_size = imutils.get_strided_up_size(size, 16)
@@ -53,9 +57,11 @@ def _work(process_id, model, dataset, args):
 
             strided_cam = strided_cam[valid_cat]
             strided_cam /= F.adaptive_max_pool2d(strided_cam, (1, 1)) + 1e-5
+            strided_cam = torch.maximum(strided_cam, orig_strided_cam)
 
             highres_cam = highres_cam[valid_cat]
             highres_cam /= F.adaptive_max_pool2d(highres_cam, (1, 1)) + 1e-5
+            highres_cam = torch.maximum(highres_cam, orig_highres_cam)
 
             # Save CAM as image
             raw_img = np.asarray(cv2.imread(os.path.join("../data/VOC2012/JPEGImages",img_name+".jpg")))
@@ -73,8 +79,8 @@ def _work(process_id, model, dataset, args):
             cv2.imwrite(outfile, cam_output)
 
             # save cams
-            # np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
-            #         {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
+            np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
+                    {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
 
             # if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
             #     print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')

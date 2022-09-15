@@ -58,6 +58,7 @@ if __name__ == '__main__':
     parser.add_argument("--cam_weights_name", default="sess/voc12/res50_adv.pth", type=str)
     parser.add_argument("--irn_weights_name", default="sess/voc12/res50_irn.pth", type=str)
     parser.add_argument("--cam_out_dir", default="result/voc12/cam", type=str)
+    parser.add_argument("--prev_cam_out_dir", default="result/voc12/prev_cam", type=str)
     parser.add_argument("--ir_label_out_dir", default="result/voc12/ir_label", type=str)
     parser.add_argument("--sem_seg_out_dir", default="result/voc12/sem_seg", type=str)
     # parser.add_argument("--ins_seg_out_dir", default="result/voc12/ins_seg", type=str)

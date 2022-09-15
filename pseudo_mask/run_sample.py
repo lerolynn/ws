@@ -15,7 +15,7 @@ if __name__ == '__main__':
     parser.add_argument("--voc12_root", default="../data/VOC2012", type=str)
 
     # Dataset
-    parser.add_argument("--train_list", default="voc12/train2.txt", type=str)
+    parser.add_argument("--train_list", default="voc12/train.txt", type=str)
     parser.add_argument("--val_list", default="voc12/val.txt", type=str)
     parser.add_argument("--infer_list", default="voc12/train.txt", type=str,
                         help="voc12/train_aug.txt to train a fully supervised model, "
@@ -58,6 +58,7 @@ if __name__ == '__main__':
     parser.add_argument("--cam_weights_name", default="sess/voc12/res50_cam.pth", type=str)
     parser.add_argument("--irn_weights_name", default="sess/voc12/res50_irn.pth", type=str)
     parser.add_argument("--cam_out_dir", default="result/voc12/cam", type=str)
+    parser.add_argument("--prev_cam_out_dir", default="result/voc12/prev_cam", type=str)
     parser.add_argument("--ir_label_out_dir", default="result/voc12/ir_label", type=str)
     parser.add_argument("--sem_seg_out_dir", default="result/voc12/sem_seg", type=str)
     # parser.add_argument("--ins_seg_out_dir", default="result/voc12/ins_seg", type=str)
@@ -80,6 +81,7 @@ if __name__ == '__main__':
     os.makedirs("log", exist_ok=True)
     os.makedirs("sess/voc12", exist_ok=True)
     os.makedirs(args.cam_out_dir, exist_ok=True)
+    os.makedirs(args.prev_cam_out_dir, exist_ok=True)
     os.makedirs(args.ir_label_out_dir, exist_ok=True)
     os.makedirs(args.sem_seg_out_dir, exist_ok=True)
     # os.makedirs(args.ins_seg_out_dir, exist_ok=True)

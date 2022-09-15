@@ -63,7 +63,7 @@ def _work(process_id, model, dataset, args):
             cam_map = cam_map.cpu().numpy()
 
             erase_mask = np.zeros((cam_map.shape))
-            erase_mask[cam_map > 0.6] = 1
+            erase_mask[cam_map > 0.9] = 1
             idx = (erase_mask==1)
 
             cam_map = plt.cm.jet_r(cam_map)[..., :3] * 255.0
@@ -81,8 +81,8 @@ def _work(process_id, model, dataset, args):
             cv2.imwrite(outfile, cam_output)
 
             # save cams
-            # np.save(os.path.join(args.cam_out_dir, img_name + '.npy'),
-            #         {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
+            np.save(os.path.join(args.prev_cam_out_dir, img_name + '.npy'),
+                    {"keys": valid_cat, "cam": strided_cam.cpu(), "high_res": highres_cam.cpu().numpy()})
 
             # if process_id == n_gpus - 1 and iter % (len(databin) // 20) == 0:
             #     print("%d " % ((5*iter+1)//(len(databin) // 20)), end='')
@@ -103,7 +103,7 @@ def run(args):
                                                              coco14_root=args.coco14_root, scales=args.cam_scales)
         
     else:
-        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.val_list,
+        dataset = voc12.dataloader.VOC12ClassificationDatasetMSF(args.train_list,
                                                              voc12_root=args.voc12_root, scales=args.cam_scales)
 
     dataset = torchutils.split_dataset(dataset, n_gpus)
