@@ -66,7 +66,7 @@ if __name__ == '__main__':
     # Step
     parser.add_argument("--train_cam_pass", default=True)
     # Train adversarial erasing step
-    parser.add_argument("--train_adv_pass", default=True)
+    parser.add_argument("--train_adv_pass", default=False)
 
     parser.add_argument("--make_cam_pass", default=True)
     parser.add_argument("--eval_cam_pass", default=True)
