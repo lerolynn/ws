@@ -124,3 +124,12 @@ python main.py crf --config-path configs/coco14.yaml
 
 Significant portions of the code from this repository was borrowed from [IRN](https://github.com/jiwoon-ahn/irn) and [deeplab-pytorch](https://github.com/kazuto1011/deeplab-pytorch). Thank you [Jiwoon Ahn](https://github.com/jiwoon-ahn/irn) and [
 Kazuto Nakashima](https://github.com/kazuto1011).
+
+
+
+## CGNET
+
+```
+python train.py --name just_cam --model model_cse --er_init cam
+python infer.py --name just_cam --model model_cse --load_epo 13 --vis --dict --crf --alphas 6 10 24
+```
