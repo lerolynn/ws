@@ -17,7 +17,7 @@ for i, id in enumerate(tqdm(dataset.ids)):
     cams = np.stack(list(cam_dict.values())[1:], axis=0)
 
     np.save(os.path.join("result/voc12/cg_cam", id + '.npy'),
-            {"keys": keys, "high_res": cams})
+            {"keys": keys, "cam": cams, "high_res": cams})
 
 
 # preds = []
