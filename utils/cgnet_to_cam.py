@@ -4,20 +4,37 @@ import os
 from chainercv.datasets import VOCSemanticSegmentationDataset
 from chainercv.evaluations import calc_semantic_segmentation_confusion
 
+import cv2
+import torch
+import torch.nn.functional as F
 from PIL import Image
 from tqdm import tqdm
+
+def get_strided_size(orig_size, stride):
+    return (torch.div(orig_size[0]-1, stride, rounding_mode='trunc') + 1, 
+            torch.div(orig_size[1]-1, stride, rounding_mode='trunc') + 1)
+
 
 dataset = VOCSemanticSegmentationDataset(split="train", data_dir="../data/VOC2012")
 labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
 for i, id in enumerate(tqdm(dataset.ids)):
+    orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
+
     cam_dict = np.load(os.path.join("result/voc12/crf/06", id + '.npy'), allow_pickle=True).item()
     keys = list(cam_dict.keys())[1:]
     keys = np.array([keys[i]-1 for i in range(len(keys))])
-    cams = np.stack(list(cam_dict.values())[1:], axis=0)
+    high_res_cams = np.stack(list(cam_dict.values())[1:], axis=0)
+
+    high_res_shape = high_res_cams.shape
+    cam_shape = (int(torch.div(high_res_shape[2]-1, 4, rounding_mode='trunc') + 1),
+                int(torch.div(high_res_shape[1]-1, 4, rounding_mode='trunc') + 1))
+    cams = list(cam_dict.values())[1:]
+    cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
+    cams = torch.from_numpy(cams)
 
     np.save(os.path.join("result/voc12/cg_cam", id + '.npy'),
-            {"keys": keys, "cam": cams, "high_res": cams})
+            {"keys": keys, "cam": cams, "high_res": high_res_cams})
 
 
 # preds = []
