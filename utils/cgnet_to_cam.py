@@ -24,31 +24,31 @@ with open("voc12/train_aug.txt") as f:
 for i, id in enumerate(tqdm(ids)):
     orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
 
-    cam_dict = np.load(os.path.join("result/voc12/just_cam/dict", id + '.npy'), allow_pickle=True).item()
-    keys = list(cam_dict.keys())
-    keys = np.array([keys[i] for i in range(len(keys))])
-    high_res_cams = np.stack(list(cam_dict.values()), axis=0)
-
-    high_res_shape = high_res_cams.shape
-    cam_shape = (int(torch.div(high_res_shape[2], 4, rounding_mode='trunc') + 1),
-                int(torch.div(high_res_shape[1], 4, rounding_mode='trunc') + 1))
-    cams = list(cam_dict.values())
-    cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
-    cams = torch.from_numpy(cams)
-
-    # cam_dict = np.load(os.path.join("result/voc12/crf/10", id + '.npy'), allow_pickle=True).item()
-    # keys = list(cam_dict.keys())[1:]
-    # keys = np.array([keys[i]-1 for i in range(len(keys))])
-    # high_res_cams = np.stack(list(cam_dict.values())[1:], axis=0)
+    # cam_dict = np.load(os.path.join("result/voc12/just_cam/dict", id + '.npy'), allow_pickle=True).item()
+    # keys = list(cam_dict.keys())
+    # keys = np.array([keys[i] for i in range(len(keys))])
+    # high_res_cams = np.stack(list(cam_dict.values()), axis=0)
 
     # high_res_shape = high_res_cams.shape
-    # cam_shape = (int(torch.div(high_res_shape[2]-1, 4, rounding_mode='trunc') + 1),
-    #             int(torch.div(high_res_shape[1]-1, 4, rounding_mode='trunc') + 1))
-    # cams = list(cam_dict.values())[1:]
+    # cam_shape = (int(torch.div(high_res_shape[2], 4, rounding_mode='trunc') + 1),
+    #             int(torch.div(high_res_shape[1], 4, rounding_mode='trunc') + 1))
+    # cams = list(cam_dict.values())
     # cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
     # cams = torch.from_numpy(cams)
 
-    np.save(os.path.join("result/voc12/cg_cam/cg_dict", id + '.npy'),
+    cam_dict = np.load(os.path.join("result/voc12/crf/10", id + '.npy'), allow_pickle=True).item()
+    keys = list(cam_dict.keys())[1:]
+    keys = np.array([keys[i]-1 for i in range(len(keys))])
+    high_res_cams = np.stack(list(cam_dict.values())[1:], axis=0)
+
+    high_res_shape = high_res_cams.shape
+    cam_shape = (int(torch.div(high_res_shape[2]-1, 4, rounding_mode='trunc') + 1),
+                int(torch.div(high_res_shape[1]-1, 4, rounding_mode='trunc') + 1))
+    cams = list(cam_dict.values())[1:]
+    cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
+    cams = torch.from_numpy(cams)
+
+    np.save(os.path.join("result/voc12/cg_cam/cg_10", id + '.npy'),
             {"keys": keys, "cam": cams, "high_res": high_res_cams})
 
 
