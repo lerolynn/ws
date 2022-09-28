@@ -59,7 +59,7 @@ labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
 for i, id in enumerate(tqdm(dataset.ids)):
 
-    orig = np.load(os.path.join("result/voc12/cg_cam", id + '.npy'), allow_pickle=True).item()
+    orig = np.load(os.path.join("result/voc12/cg_cam/cg_10", id + '.npy'), allow_pickle=True).item()
     keys = np.pad(orig['keys'] + 1, (1, 0), mode='constant')
     cams = orig['high_res']
 
