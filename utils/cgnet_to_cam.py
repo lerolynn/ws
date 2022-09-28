@@ -18,11 +18,11 @@ def get_strided_size(orig_size, stride):
 dataset = VOCSemanticSegmentationDataset(split="train", data_dir="../data/VOC2012")
 labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
-with open("voc12/train.txt") as f:
+with open("voc12/train_aug.txt") as f:
     ids = [x.strip() for x in f.readlines()]
 
 for i, id in enumerate(tqdm(ids)):
-    # orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
+    orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
 
     cam_dict = np.load(os.path.join("result/voc12/just_cam/dict", id + '.npy'), allow_pickle=True).item()
     keys = list(cam_dict.keys())
@@ -37,7 +37,6 @@ for i, id in enumerate(tqdm(ids)):
     cams = torch.from_numpy(cams)
 
     # cam_dict = np.load(os.path.join("result/voc12/crf/10", id + '.npy'), allow_pickle=True).item()
-    # print(cam_dict)
     # keys = list(cam_dict.keys())[1:]
     # keys = np.array([keys[i]-1 for i in range(len(keys))])
     # high_res_cams = np.stack(list(cam_dict.values())[1:], axis=0)
@@ -49,7 +48,7 @@ for i, id in enumerate(tqdm(ids)):
     # cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
     # cams = torch.from_numpy(cams)
 
-    np.save(os.path.join("result/voc12/cg_cam", id + '.npy'),
+    np.save(os.path.join("result/voc12/cg_cam/cg_dict", id + '.npy'),
             {"keys": keys, "cam": cams, "high_res": high_res_cams})
 
 
