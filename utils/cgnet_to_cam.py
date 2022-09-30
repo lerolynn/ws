@@ -79,13 +79,13 @@ for i, id in enumerate(tqdm(dataset.ids)):
 
     if args.orig_dict:
         cam_dict = np.load(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
-        keys = np.array(list(cam_dict.keys()))
-        cams = np.stack(list(cam_dict.values())[1:], axis=0)
+        keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
+        cams = cam_dict['high_res']
 
     else:    
-        orig = np.load(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
-        keys = np.pad(orig['keys'] + 1, (1, 0), mode='constant')
-        cams = orig['high_res']
+        cam_dict = np.load(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
+        keys = np.array(list(cam_dict.keys()))
+        cams = np.stack(list(cam_dict.values())[1:], axis=0)
 
     cams = np.pad(cams, ((1, 0), (0, 0), (0, 0)), mode='constant', constant_values=0.15)
     cls_labels = np.argmax(cams, axis=0)
