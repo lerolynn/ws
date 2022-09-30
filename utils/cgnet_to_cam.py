@@ -28,7 +28,7 @@ parser.add_argument("--crf_applied", default=True)
 parser.add_argument("--cam_dir", default="06", type=str)
 # parser.add_argument("--cam_out_dir", default="result/voc12/cg_cam/cg_06", type=str)
 args = parser.parse_args()
-
+os.makedirs(os.path.join("result/voc12/cgnet_output", args.cam_dir), exist_ok=True) # CAM image
 for i, id in enumerate(tqdm(ids)):
 
     # orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
