@@ -20,20 +20,26 @@ def get_strided_size(orig_size, stride):
 dataset = VOCSemanticSegmentationDataset(split="train", data_dir="../data/VOC2012")
 labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
-with open("voc12/train_aug.txt") as f:
+with open("voc12/train.txt") as f:
     ids = [x.strip() for x in f.readlines()]
 
 parser = argparse.ArgumentParser()
-parser.add_argument("--orig_dict", default=True)
+parser.add_argument("--orig_dict", action='store_true')
 parser.add_argument("--cam_dir", default="06", type=str)
 # parser.add_argument("--cam_out_dir", default="result/voc12/cg_cam/cg_06", type=str)
 args = parser.parse_args()
 os.makedirs(os.path.join("result/voc12/cgnet_output", args.cam_dir), exist_ok=True) # CAM image
+
+if args.orig_dict is True:
+    print("Converting dict")
+else:
+    print("Converting crf")
+
 for i, id in enumerate(tqdm(ids)):
 
     # orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
 
-    if args.orig_dict:
+    if args.orig_dict is True:
         cam_dict = np.load(os.path.join("result/voc12/cgnet_input/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
         keys = list(cam_dict.keys())
         keys = np.array([keys[i] for i in range(len(keys))])
@@ -59,6 +65,7 @@ for i, id in enumerate(tqdm(ids)):
         cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
         cams = torch.from_numpy(cams)
 
+
     # raw_img = np.asarray(cv2.imread(os.path.join("../data/VOC2012/JPEGImages",id+".jpg")))
     # cam_map, _ = torch.max(torch.from_numpy(high_res_cams), dim=0)
     # cam_map = cam_map.cpu().numpy()
@@ -67,7 +74,7 @@ for i, id in enumerate(tqdm(ids)):
     # outfile = os.path.join("result/voc12/cgcam_img", id + ".png")
     # cv2.imwrite(outfile, cam_output)
     np.save(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'),
-            {"keys": keys, "cam": cams, "high_res": high_res_cams})
+        {"keys": keys, "cam": cams, "high_res": high_res_cams})
 
 
 preds = []
@@ -77,9 +84,9 @@ labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
 for i, id in enumerate(tqdm(dataset.ids)):
 
-    cam_dict = np.load(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
-    keys = np.pad(cam_dict['keys'] + 1, (1, 0), mode='constant')
-    cams = cam_dict['high_res']
+    orig = np.load(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
+    keys = np.pad(orig['keys'] + 1, (1, 0), mode='constant')
+    cams = orig['high_res']
 
         # cam_dict = np.load(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
         # keys = np.array(list(cam_dict.keys()))
