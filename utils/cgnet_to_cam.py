@@ -20,7 +20,7 @@ def get_strided_size(orig_size, stride):
 dataset = VOCSemanticSegmentationDataset(split="train", data_dir="../data/VOC2012")
 labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
-with open("voc12/train.txt") as f:
+with open("voc12/train_aug.txt") as f:
     ids = [x.strip() for x in f.readlines()]
 
 parser = argparse.ArgumentParser()
