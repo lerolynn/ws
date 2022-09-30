@@ -76,15 +76,16 @@ dataset = VOCSemanticSegmentationDataset(split="train", data_dir="../data/VOC201
 labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
 for i, id in enumerate(tqdm(dataset.ids)):
+    
+    if not args.crf_applied:
+        cam_dict = np.load(os.path.join("result/voc12/06", id + '.npy'), allow_pickle=True).item()
+        keys = np.array(list(cam_dict.keys()))
+        cams = np.stack(list(cam_dict.values())[1:], axis=0)
 
-    orig = np.load(os.path.join(args.cam_out_dir, id + '.npy'), allow_pickle=True).item()
-    keys = np.pad(orig['keys'] + 1, (1, 0), mode='constant')
-    cams = orig['high_res']
-
-
-    # cam_dict = np.load(os.path.join("result/voc12/06", id + '.npy'), allow_pickle=True).item()
-    # keys = np.array(list(cam_dict.keys()))
-    # cams = np.stack(list(cam_dict.values())[1:], axis=0)
+    else:    
+        orig = np.load(os.path.join(args.cam_out_dir, id + '.npy'), allow_pickle=True).item()
+        keys = np.pad(orig['keys'] + 1, (1, 0), mode='constant')
+        cams = orig['high_res']
 
     cams = np.pad(cams, ((1, 0), (0, 0), (0, 0)), mode='constant', constant_values=0.15)
     cls_labels = np.argmax(cams, axis=0)
