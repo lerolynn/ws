@@ -4,6 +4,7 @@ import os
 from chainercv.datasets import VOCSemanticSegmentationDataset
 from chainercv.evaluations import calc_semantic_segmentation_confusion
 
+import argparse
 import cv2
 import torch
 import torch.nn.functional as F
@@ -22,33 +23,41 @@ labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 with open("voc12/train.txt") as f:
     ids = [x.strip() for x in f.readlines()]
 
+parser = argparse.ArgumentParser()
+parser.add_argument("--crf_applied", default=True)
+parser.add_argument("--input_dir", default="result/voc12/cgnet_input/06", type=str)
+parser.add_argument("--cam_out_dir", default="result/voc12/cg_cam/cg_06", type=str)
+args = parser.parse_args()
+
 for i, id in enumerate(tqdm(ids)):
 
-    orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
+    # orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
 
-    # cam_dict = np.load(os.path.join("result/voc12/just_cam/dict", id + '.npy'), allow_pickle=True).item()
-    # keys = list(cam_dict.keys())
-    # keys = np.array([keys[i] for i in range(len(keys))])
-    # high_res_cams = np.stack(list(cam_dict.values()), axis=0)
+    if not args.crf_applied:
+        cam_dict = np.load(os.path.join(args.input_dir, id + '.npy'), allow_pickle=True).item()
+        keys = list(cam_dict.keys())
+        keys = np.array([keys[i] for i in range(len(keys))])
+        high_res_cams = np.stack(list(cam_dict.values()), axis=0)
 
-    # high_res_shape = high_res_cams.shape
-    # cam_shape = (int(torch.div(high_res_shape[2], 4, rounding_mode='trunc') + 1),
-    #             int(torch.div(high_res_shape[1], 4, rounding_mode='trunc') + 1))
-    # cams = list(cam_dict.values())
-    # cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
-    # cams = torch.from_numpy(cams)
+        high_res_shape = high_res_cams.shape
+        cam_shape = (int(torch.div(high_res_shape[2], 4, rounding_mode='trunc') + 1),
+                    int(torch.div(high_res_shape[1], 4, rounding_mode='trunc') + 1))
+        cams = list(cam_dict.values())
+        cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
+        cams = torch.from_numpy(cams)
 
-    cam_dict = np.load(os.path.join("result/voc12/cg_06", id + '.npy'), allow_pickle=True).item()
-    keys = list(cam_dict.keys())[1:]
-    keys = np.array([keys[i]-1 for i in range(len(keys))])
-    high_res_cams = np.stack(list(cam_dict.values())[1:], axis=0)
+    else:
+        cam_dict = np.load(os.path.join(args.input_dir, id + '.npy'), allow_pickle=True).item()
+        keys = list(cam_dict.keys())[1:]
+        keys = np.array([keys[i]-1 for i in range(len(keys))])
+        high_res_cams = np.stack(list(cam_dict.values())[1:], axis=0)
 
-    high_res_shape = high_res_cams.shape
-    cam_shape = (int(torch.div(high_res_shape[2]-1, 4, rounding_mode='trunc') + 1),
-                int(torch.div(high_res_shape[1]-1, 4, rounding_mode='trunc') + 1))
-    cams = list(cam_dict.values())[1:]
-    cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
-    cams = torch.from_numpy(cams)
+        high_res_shape = high_res_cams.shape
+        cam_shape = (int(torch.div(high_res_shape[2]-1, 4, rounding_mode='trunc') + 1),
+                    int(torch.div(high_res_shape[1]-1, 4, rounding_mode='trunc') + 1))
+        cams = list(cam_dict.values())[1:]
+        cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
+        cams = torch.from_numpy(cams)
 
     # raw_img = np.asarray(cv2.imread(os.path.join("../data/VOC2012/JPEGImages",id+".jpg")))
     # cam_map, _ = torch.max(torch.from_numpy(high_res_cams), dim=0)
@@ -57,7 +66,7 @@ for i, id in enumerate(tqdm(ids)):
     # cam_output = (cam_map.astype(np.float) * (1/2) + raw_img.astype(np.float) * (1/2))
     # outfile = os.path.join("result/voc12/cgcam_img", id + ".png")
     # cv2.imwrite(outfile, cam_output)
-    np.save(os.path.join("result/voc12/cg_cam/cg_06", id + '.npy'),
+    np.save(os.path.join(args.cam_out_dir, id + '.npy'),
             {"keys": keys, "cam": cams, "high_res": high_res_cams})
 
 
@@ -68,7 +77,7 @@ labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
 for i, id in enumerate(tqdm(dataset.ids)):
 
-    orig = np.load(os.path.join("result/voc12/cg_cam/cg_06", id + '.npy'), allow_pickle=True).item()
+    orig = np.load(os.path.join(args.cam_out_dir, id + '.npy'), allow_pickle=True).item()
     keys = np.pad(orig['keys'] + 1, (1, 0), mode='constant')
     cams = orig['high_res']
 
