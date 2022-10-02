@@ -104,18 +104,18 @@ if __name__ == '__main__':
         step.train_cam.run(args)
 
     # Recursive adversarial erasing
-    if args.train_adv_pass is True:
-        import step.train_adv
-        import step.make_adv
-        import step.eval_cam
+    # if args.train_adv_pass is True:
+    #     import step.train_adv
+    #     import pseudo_mask.step.make_cam
+    #     import step.eval_cam
 
-        thresh = [0.95, 0.9]
+    #     thresh = [0.95, 0.9]
 
-        for i in range(len(thresh)):
-            timer = pyutils.Timer('step.make_adv:')
-            step.make_adv.run(args, thresh[i])
-            timer = pyutils.Timer('step.train_adv:')
-            step.train_adv.run(args)
+    #     for i in range(len(thresh)):
+    #         timer = pyutils.Timer('step.make_adv:')
+    #         step.make_adv2.run(args, thresh[i])
+    #         timer = pyutils.Timer('step.train_adv:')
+    #         step.train_adv.run(args)
 
     if args.make_cam_pass is True:
         import step.make_cam
