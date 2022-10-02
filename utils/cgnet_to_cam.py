@@ -40,7 +40,7 @@ for i, id in enumerate(tqdm(ids)):
     # orig = np.load(os.path.join("result/voc12/cam", id + '.npy'), allow_pickle=True).item()
 
     if args.orig_dict is True:
-        cam_dict = np.load(os.path.join("result/voc12/cgnet_input/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
+        cam_dict = np.load(os.path.join("cgnet/input/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
         keys = list(cam_dict.keys())
         keys = np.array([keys[i] for i in range(len(keys))])
         high_res_cams = np.stack(list(cam_dict.values()), axis=0)
@@ -53,7 +53,7 @@ for i, id in enumerate(tqdm(ids)):
         cams = torch.from_numpy(cams)
 
     else:
-        cam_dict = np.load(os.path.join("result/voc12/cgnet_input/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
+        cam_dict = np.load(os.path.join("cgnet/input/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
         keys = list(cam_dict.keys())[1:]
         keys = np.array([keys[i]-1 for i in range(len(keys))])
         high_res_cams = np.stack(list(cam_dict.values())[1:], axis=0)
@@ -73,7 +73,7 @@ for i, id in enumerate(tqdm(ids)):
     # cam_output = (cam_map.astype(np.float) * (1/2) + raw_img.astype(np.float) * (1/2))
     # outfile = os.path.join("result/voc12/cgcam_img", id + ".png")
     # cv2.imwrite(outfile, cam_output)
-    np.save(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'),
+    np.save(os.path.join("cgnet/output/", args.cam_dir, id + '.npy'),
         {"keys": keys, "cam": cams, "high_res": high_res_cams})
 
 
@@ -84,7 +84,7 @@ labels = [dataset.get_example_by_keys(i, (1,))[0] for i in range(len(dataset))]
 
 for i, id in enumerate(tqdm(dataset.ids)):
 
-    orig = np.load(os.path.join("result/voc12/cgnet_output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
+    orig = np.load(os.path.join("cgnet/output/", args.cam_dir, id + '.npy'), allow_pickle=True).item()
     keys = np.pad(orig['keys'] + 1, (1, 0), mode='constant')
     cams = orig['high_res']
 
