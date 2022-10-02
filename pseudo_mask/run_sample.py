@@ -64,7 +64,7 @@ if __name__ == '__main__':
     # parser.add_argument("--ins_seg_out_dir", default="result/voc12/ins_seg", type=str)
 
     # Step
-    parser.add_argument("--train_cam_pass", default=True)
+    parser.add_argument("--train_cam_pass", default=False)
     # Train adversarial erasing step
     parser.add_argument("--train_adv_pass", default=True)
 

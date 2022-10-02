@@ -77,8 +77,8 @@ def _work(process_id, model, dataset, args, thres):
             cam_output = raw_img.astype(np.float)
 
             # Save erased images
-            outfile = os.path.join("result/voc12/erased_jpg", img_name + ".png")
-            cv2.imwrite(outfile, cam_output)
+            # outfile = os.path.join("result/voc12/erased_jpg", img_name + ".png")
+            # cv2.imwrite(outfile, cam_output)
 
             # save cams
             np.save(os.path.join(args.prev_cam_out_dir, img_name + '.npy'),
