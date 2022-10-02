@@ -46,8 +46,9 @@ for i, id in enumerate(tqdm(ids)):
         high_res_cams = np.stack(list(cam_dict.values()), axis=0)
 
         high_res_shape = high_res_cams.shape
-        cam_shape = (int(torch.div(high_res_shape[2], 4, rounding_mode='trunc') + 1),
-                    int(torch.div(high_res_shape[1], 4, rounding_mode='trunc') + 1))
+        cam_shape = (int(torch.div(high_res_shape[2]-1, 4, rounding_mode='trunc') + 1),
+                    int(torch.div(high_res_shape[1]-1, 4, rounding_mode='trunc') + 1))
+
         cams = list(cam_dict.values())
         cams = np.stack([cv2.resize(cams[i], dsize=cam_shape, interpolation=cv2.INTER_LINEAR) for i in range(len(cams))], axis=0)
         cams = torch.from_numpy(cams)
