@@ -24,3 +24,5 @@ dependencies:
     - pycocotools==2.0.4
     - tqdm
     - gdown
+
+    - pandas
