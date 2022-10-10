@@ -1,6 +1,7 @@
 # Weakly Supervised Semantic Segmentation
 
 This repository runs the full Weakly Supervised Semantic Segmentaiton pipeline following the method of [IRNet](https://github.com/jiwoon-ahn/irn)
+Note: Additions for AMN and CGNet are in the branch `cgnet_amn`
 
 ## Installation
 
