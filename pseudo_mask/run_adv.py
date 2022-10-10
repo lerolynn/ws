@@ -96,10 +96,10 @@ if __name__ == '__main__':
         step.train_adv.run(args)
 
     if args.make_cam_pass is True:
-        import step.make_adv
+        import pseudo_mask.step.make_cam
 
         timer = pyutils.Timer('step.make_adv:')
-        step.make_adv.run(args)
+        step.make_adv2.run(args)
 
     if args.eval_cam_pass is True:
         import step.eval_cam

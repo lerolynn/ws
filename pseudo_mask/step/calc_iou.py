@@ -51,8 +51,8 @@ def run():
     print(Counter(list(best_threshold)))
     print("IoU", np.average(best_iou))
     
-    # plt.hist(best_threshold, width=0.04, align="mid")
-    # plt.xticks(thresholds)
-    # plt.show()
+    plt.hist(best_threshold, width=0.04, align="mid")
+    plt.xticks(thresholds)
+    plt.show()
 
 run()
